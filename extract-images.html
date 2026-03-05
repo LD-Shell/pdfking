@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extract Images | PDFKing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Initializing the pdf.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col">
+
+    <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto w-full">
+        <a href="index.html" class="text-2xl font-black tracking-tighter text-indigo-600 hover:opacity-80 transition-opacity">PDFKing</a>
+        <a href="index.html" class="text-sm font-medium hover:text-indigo-600"><i class="fa-solid fa-arrow-left mr-2"></i>Back to Tools</a>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12 flex-grow w-full text-center">
+        <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6 text-purple-600">
+            <i class="fa-solid fa-file-image text-3xl"></i>
+        </div>
+        <h2 class="text-3xl font-extrabold mb-4">Extract Images</h2>
+        <p class="text-slate-500 mb-8">Pull out embedded images directly from your PDF source document.</p>
+
+        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm max-w-2xl mx-auto mb-8">
+            <input type="file" id="fileInput" accept="application/pdf" class="hidden">
+            <label for="fileInput" class="cursor-pointer block border-2 border-dashed border-purple-300 bg-purple-50 rounded-xl p-8 hover:bg-purple-100 transition-colors mb-6 text-center">
+                <i class="fa-solid fa-file-pdf text-4xl text-purple-400 mb-3"></i>
+                <span id="fileLabel" class="block text-purple-700 font-medium">Click to select a PDF file</span>
+            </label>
+
+            <button id="extractBtn" class="w-full bg-purple-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                Scan for Images
+            </button>
+            
+            <div id="status" class="mt-4 text-sm font-medium hidden text-center p-4 rounded-xl"></div>
+        </div>
+
+        <div id="imageContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+            </div>
+    </main>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const fileLabel = document.getElementById('fileLabel');
+        const extractBtn = document.getElementById('extractBtn');
+        const statusDiv = document.getElementById('status');
+        const imageContainer = document.getElementById('imageContainer');
+        
+        let currentFile = null;
+
+        // Binding file selection events
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length === 0) return;
+            
+            currentFile = e.target.files[0];
+            fileLabel.innerText = currentFile.name;
+            extractBtn.disabled = false;
+            statusDiv.classList.add('hidden');
+            imageContainer.innerHTML = '';
+            imageContainer.classList.add('hidden');
+        });
+
+        // Executing the extraction pipeline
+        extractBtn.addEventListener('click', async () => {
+            if (!currentFile) return;
+
+            try {
+                // Updating interface state
+                extractBtn.disabled = true;
+                extractBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Scanning...';
+                statusDiv.className = 'mt-4 text-sm font-medium text-slate-600 block bg-slate-50 text-center p-4 rounded-xl';
+                statusDiv.innerText = 'Analyzing document structure...';
+                imageContainer.innerHTML = '';
+                imageContainer.classList.remove('hidden');
+
+                const fileArrayBuffer = await currentFile.arrayBuffer();
+                const loadingTask = pdfjsLib.getDocument(fileArrayBuffer);
+                const pdf = await loadingTask.promise;
+                
+                let extractedCount = 0;
+
+                // I am iterating through each page to access its underlying rendering operators.
+                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                    statusDiv.innerText = `Scanning page ${pageNum} of ${pdf.numPages}...`;
+                    const page = await pdf.getPage(pageNum);
+                    
+                    // I am requesting the operator list to identify image drawing commands.
+                    const ops = await page.getOperatorList();
+                    
+                    for (let i = 0; i < ops.fnArray.length; i++) {
+                        const fn = ops.fnArray[i];
+                        
+                        // I am filtering for XObject painting operators which correspond to embedded images.
+                        if (fn === pdfjsLib.OPS.paintImageXObject || fn === pdfjsLib.OPS.paintJpegXObject) {
+                            const objId = ops.argsArray[i][0];
+                            const imgObj = await new Promise(resolve => {
+                                page.objs.get(objId, (img) => resolve(img));
+                            });
+
+                            if (imgObj && imgObj.data) {
+                                extractedCount++;
+                                
+                                // I am constructing an off-screen canvas to convert the raw pixel arrays into a downloadable format.
+                                const canvas = document.createElement('canvas');
+                                canvas.width = imgObj.width;
+                                canvas.height = imgObj.height;
+                                const ctx = canvas.getContext('2d');
+                                
+                                const imgData = ctx.createImageData(imgObj.width, imgObj.height);
+                                
+                                // I am accounting for different color space matrices.
+                                if (imgObj.data.length === imgObj.width * imgObj.height * 4) {
+                                    imgData.data.set(imgObj.data);
+                                } else if (imgObj.data.length === imgObj.width * imgObj.height * 3) {
+                                    for (let j = 0, k = 0; j < imgObj.data.length; j += 3, k += 4) {
+                                        imgData.data[k] = imgObj.data[j];
+                                        imgData.data[k+1] = imgObj.data[j+1];
+                                        imgData.data[k+2] = imgObj.data[j+2];
+                                        imgData.data[k+3] = 255;
+                                    }
+                                }
+                                
+                                ctx.putImageData(imgData, 0, 0);
+                                const dataUrl = canvas.toDataURL('image/png');
+                                appendImageCard(dataUrl, extractedCount, pageNum);
+                            }
+                        }
+                    }
+                }
+
+                if (extractedCount > 0) {
+                    statusDiv.className = 'mt-4 text-sm font-medium text-green-700 block bg-green-50 text-center p-4 rounded-xl';
+                    statusDiv.innerText = `Success. Extracted ${extractedCount} images.`;
+                } else {
+                    statusDiv.className = 'mt-4 text-sm font-medium text-orange-700 block bg-orange-50 text-center p-4 rounded-xl';
+                    statusDiv.innerText = 'No extractable embedded images found in this document.';
+                }
+
+            } catch (error) {
+                console.error(error);
+                statusDiv.className = 'mt-4 text-sm font-medium text-red-700 block bg-red-50 text-center p-4 rounded-xl';
+                statusDiv.innerText = 'A parsing error occurred during extraction.';
+            } finally {
+                // Resetting interface state
+                extractBtn.disabled = false;
+                extractBtn.innerText = 'Scan for Images';
+            }
+        });
+
+        // Rendering the extracted images to the DOM
+        function appendImageCard(dataUrl, index, pageNum) {
+            const card = document.createElement('div');
+            card.className = 'bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col';
+
+            const img = document.createElement('img');
+            img.src = dataUrl;
+            img.className = 'w-full h-32 object-contain rounded-xl border border-slate-100 mb-4 bg-slate-50';
+
+            const dlBtn = document.createElement('a');
+            dlBtn.href = dataUrl;
+            dlBtn.download = `extracted_image_${index}.png`;
+            dlBtn.className = 'mt-auto bg-slate-900 text-white font-medium py-2 px-4 rounded-lg hover:bg-slate-800 transition-colors text-xs text-center';
+            dlBtn.innerHTML = `<i class="fa-solid fa-download mr-2"></i>Img ${index} (Pg ${pageNum})`;
+
+            card.appendChild(img);
+            card.appendChild(dlBtn);
+            imageContainer.appendChild(card);
+        }
+    </script>
+</body>
+</html>
