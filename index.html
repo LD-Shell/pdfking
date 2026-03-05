@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDFKing | Browser-Based PDF Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .tool-card:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans">
+
+    <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto">
+        <h1 class="text-2xl font-black tracking-tighter text-indigo-600">PDFKing👑</h1>
+        <div class="space-x-6 hidden md:block text-sm font-medium">
+            <a href="#" class="hover:text-indigo-600">Tools</a>
+            <a href="#" class="hover:text-indigo-600">Privacy</a>
+            <a href="https://github.com/your-username/pdf-king" class="bg-slate-900 text-white px-4 py-2 rounded-full">GitHub</a>
+        </div>
+    </nav>
+
+    <header class="py-16 px-6 text-center max-w-4xl mx-auto">
+        <span class="bg-indigo-100 text-indigo-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest">100% Client-Side</span>
+        <h2 class="text-5xl md:text-7xl font-extrabold mt-6 mb-4 tracking-tight">
+            Stop uploading your <span class="text-indigo-600 underline">private</span> files.
+        </h2>
+        <p class="text-xl text-slate-500 mb-8">
+            Fast, free, and secure. PDFKing processes everything in your browser. No servers, no logs, no cap. 🧢
+        </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 pb-24">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <a href="/merge" class="tool-card p-8 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-300">
+                <div class="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center mb-6 text-indigo-600">
+                    <i class="fa-solid fa-object-group text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Merge PDFs</h3>
+                <p class="text-slate-500 text-sm">Combine multiple files into one seamless document in seconds.</p>
+            </a>
+
+            <a href="/split" class="tool-card p-8 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-300">
+                <div class="w-12 h-12 bg-red-100 rounded-2xl flex items-center justify-center mb-6 text-red-600">
+                    <i class="fa-solid fa-scissors text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Split / Extract</h3>
+                <p class="text-slate-500 text-sm">Extract specific pages or break a large PDF into smaller parts.</p>
+            </a>
+
+            <a href="/compress" class="tool-card p-8 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-300">
+                <div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mb-6 text-green-600">
+                    <i class="fa-solid fa-compress text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Compress PDF</h3>
+                <p class="text-slate-500 text-sm">Reduce file size without losing quality for easy emailing.</p>
+            </a>
+
+            <a href="/pdf-to-img" class="tool-card p-8 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-300">
+                <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center mb-6 text-orange-600">
+                    <i class="fa-solid fa-image text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">PDF to Image</h3>
+                <p class="text-slate-500 text-sm">Convert pages into high-quality JPG or PNG assets.</p>
+            </a>
+
+            <a href="/extract-images" class="tool-card p-8 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-300">
+                <div class="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center mb-6 text-purple-600">
+                    <i class="fa-solid fa-file-image text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Extract Images</h3>
+                <p class="text-slate-500 text-sm">Pull out embedded images directly from your PDF source.</p>
+            </a>
+
+            <a href="/rotate" class="tool-card p-8 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-300">
+                <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 text-blue-600">
+                    <i class="fa-solid fa-rotate text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Rotate Pages</h3>
+                <p class="text-slate-500 text-sm">Fix those annoying upside-down scans instantly.</p>
+            </a>
+
+        </div>
+    </main>
+
+    <footer class="border-t border-slate-200 py-12 text-center text-slate-400 text-xs">
+        <p>&copy; 2026 PDFKing. Built with ❤️ and Zero Servers.</p>
+    </footer>
+
+</body>
+</html>
