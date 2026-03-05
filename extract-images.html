@@ -1,176 +1,397 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Extract Images | PDFKing</title>
+    <title>Advanced Image Extraction | PDFKing</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
-        // Initializing the pdf.js worker
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
-</head>
-<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col">
 
-    <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto w-full">
-        <a href="index.html" class="text-2xl font-black tracking-tighter text-indigo-600 hover:opacity-80 transition-opacity">PDFKing</a>
-        <a href="index.html" class="text-sm font-medium hover:text-indigo-600"><i class="fa-solid fa-arrow-left mr-2"></i>Back to Tools</a>
+    <style>
+        /* Defining custom transitions for smooth interface interactions */
+        .image-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .image-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        
+        /* Toast notification animations */
+        @keyframes slideIn { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+        .toast-enter { animation: slideIn 0.3s forwards; }
+        .toast-exit { animation: fadeOut 0.3s forwards; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <nav class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-layer-group text-purple-600 dark:text-purple-500 text-xl"></i>
+                <span class="text-xl font-black tracking-tighter text-slate-900 dark:text-white">PDFKing</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button id="themeToggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Toggle Dark Mode">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
+                </button>
+            </div>
+        </div>
     </nav>
 
-    <main class="max-w-4xl mx-auto px-6 py-12 flex-grow w-full text-center">
-        <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6 text-purple-600">
-            <i class="fa-solid fa-file-image text-3xl"></i>
-        </div>
-        <h2 class="text-3xl font-extrabold mb-4">Extract Images</h2>
-        <p class="text-slate-500 mb-8">Pull out embedded images directly from your PDF source document.</p>
-
-        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm max-w-2xl mx-auto mb-8">
+    <main class="flex-grow max-w-7xl mx-auto px-6 py-8 w-full flex flex-col">
+        
+        <div id="uploadZone" class="flex-grow flex flex-col items-center justify-center border-2 border-dashed border-purple-300 dark:border-purple-700 rounded-3xl bg-purple-50/50 dark:bg-purple-900/10 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all cursor-pointer p-12 text-center group">
             <input type="file" id="fileInput" accept="application/pdf" class="hidden">
-            <label for="fileInput" class="cursor-pointer block border-2 border-dashed border-purple-300 bg-purple-50 rounded-xl p-8 hover:bg-purple-100 transition-colors mb-6 text-center">
-                <i class="fa-solid fa-file-pdf text-4xl text-purple-400 mb-3"></i>
-                <span id="fileLabel" class="block text-purple-700 font-medium">Click to select a PDF file</span>
-            </label>
-
-            <button id="extractBtn" class="w-full bg-purple-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                Scan for Images
+            <div class="w-20 h-20 bg-purple-100 dark:bg-purple-900/50 rounded-2xl flex items-center justify-center mb-6 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-file-image text-4xl"></i>
+            </div>
+            <h2 class="text-3xl font-bold mb-3">Extract Embedded Images</h2>
+            <p class="text-slate-500 dark:text-slate-400 mb-6 max-w-md">Drag and drop your PDF here. We will scan the document's internal structure and extract all raw image files securely in your browser.</p>
+            <button class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-xl font-medium transition-colors shadow-sm">
+                Select PDF File
             </button>
-            
-            <div id="status" class="mt-4 text-sm font-medium hidden text-center p-4 rounded-xl"></div>
         </div>
 
-        <div id="imageContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+        <div id="workspace" class="hidden flex-col gap-6 w-full">
+            
+            <div class="bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-4 sticky top-20 z-40">
+                <div class="flex flex-col">
+                    <h3 id="fileName" class="font-bold text-lg truncate max-w-xs md:max-w-md" title="Document Name"></h3>
+                    <p id="fileMeta" class="text-sm text-slate-500 dark:text-slate-400"></p>
+                </div>
+                
+                <div class="flex items-center gap-3 flex-wrap">
+                    <div class="bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-4 py-2 rounded-lg text-sm font-semibold border border-purple-200 dark:border-purple-800">
+                        <i class="fa-solid fa-images mr-2"></i> <span id="extractionCount">0</span> Images Found
+                    </div>
+                    
+                    <button id="extractBtn" class="bg-slate-900 dark:bg-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-slate-800 dark:hover:bg-purple-700 transition-colors flex items-center shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-magnifying-glass mr-2"></i> Scan Document
+                    </button>
+                </div>
             </div>
+
+            <div id="loadingOverlay" class="py-20 flex flex-col items-center justify-center hidden">
+                <i class="fa-solid fa-circle-notch fa-spin text-4xl text-purple-600 dark:text-purple-500 mb-4"></i>
+                <p id="loadingText" class="text-slate-600 dark:text-slate-400 font-medium">Scanning document structure...</p>
+                <div class="w-64 h-2 bg-slate-200 dark:bg-slate-800 rounded-full mt-4 overflow-hidden">
+                    <div id="loadingProgress" class="h-full bg-purple-600 transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="emptyState" class="hidden py-16 flex flex-col items-center justify-center text-center">
+                <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400">
+                    <i class="fa-regular fa-folder-open text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-bold mb-2">No Images Found</h3>
+                <p class="text-slate-500 dark:text-slate-400 max-w-sm">This document does not contain any extractable raster images. It may consist entirely of vector text and shapes.</p>
+            </div>
+
+            <div id="outputGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 hidden">
+                </div>
+
+        </div>
     </main>
 
-    <script>
-        const fileInput = document.getElementById('fileInput');
-        const fileLabel = document.getElementById('fileLabel');
-        const extractBtn = document.getElementById('extractBtn');
-        const statusDiv = document.getElementById('status');
-        const imageContainer = document.getElementById('imageContainer');
-        
-        let currentFile = null;
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
 
-        // Binding file selection events
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length === 0) return;
-            
-            currentFile = e.target.files[0];
-            fileLabel.innerText = currentFile.name;
-            extractBtn.disabled = false;
-            statusDiv.classList.add('hidden');
-            imageContainer.innerHTML = '';
-            imageContainer.classList.add('hidden');
+    <script>
+        // --- State management ---
+        let currentFileBuffer = null;
+        let originalFileName = '';
+        let documentPdf = null;
+        let isProcessing = false;
+
+        // DOM elements
+        const themeToggle = document.getElementById('themeToggle');
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const workspace = document.getElementById('workspace');
+        const fileNameEl = document.getElementById('fileName');
+        const fileMetaEl = document.getElementById('fileMeta');
+        const outputGrid = document.getElementById('outputGrid');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingText = document.getElementById('loadingText');
+        const loadingProgress = document.getElementById('loadingProgress');
+        const extractBtn = document.getElementById('extractBtn');
+        const extractionCountEl = document.getElementById('extractionCount');
+        const emptyState = document.getElementById('emptyState');
+
+        // --- Application behavior ---
+
+        // Handling environment theme
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
         });
 
-        // Executing the extraction pipeline
-        extractBtn.addEventListener('click', async () => {
-            if (!currentFile) return;
+        // Binding drag and drop matrices
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, preventDefaults, false);
+        });
 
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, () => {
+                uploadZone.classList.add('border-purple-500', 'bg-purple-100', 'dark:bg-purple-900/40');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, () => {
+                uploadZone.classList.remove('border-purple-500', 'bg-purple-100', 'dark:bg-purple-900/40');
+            });
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files.length) handleFile(files[0]);
+        });
+
+        uploadZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) handleFile(e.target.files[0]);
+        });
+
+        // --- Document analysis pipeline ---
+
+        // Initializing the document stream
+        async function handleFile(file) {
+            if (file.type !== 'application/pdf') {
+                showToast('Please upload a valid PDF document.', 'error');
+                return;
+            }
+
+            originalFileName = file.name.replace('.pdf', '');
+            fileNameEl.innerText = file.name;
+            fileMetaEl.innerText = `${formatBytes(file.size)} • Loading...`;
+            
+            uploadZone.classList.add('hidden');
+            workspace.classList.remove('hidden');
+            outputGrid.innerHTML = '';
+            extractionCountEl.innerText = '0';
+            emptyState.classList.add('hidden');
+            
             try {
-                // Updating interface state
-                extractBtn.disabled = true;
-                extractBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Scanning...';
-                statusDiv.className = 'mt-4 text-sm font-medium text-slate-600 block bg-slate-50 text-center p-4 rounded-xl';
-                statusDiv.innerText = 'Analyzing document structure...';
-                imageContainer.innerHTML = '';
-                imageContainer.classList.remove('hidden');
-
-                const fileArrayBuffer = await currentFile.arrayBuffer();
-                const loadingTask = pdfjsLib.getDocument(fileArrayBuffer);
-                const pdf = await loadingTask.promise;
+                // Storing the array buffer in a safe Uint8Array to prevent worker detachment
+                const arrayBuffer = await file.arrayBuffer();
+                currentFileBuffer = new Uint8Array(arrayBuffer);
                 
+                const loadingTask = pdfjsLib.getDocument(currentFileBuffer.slice(0));
+                documentPdf = await loadingTask.promise;
+                
+                fileMetaEl.innerText = `${formatBytes(file.size)} • ${documentPdf.numPages} Pages`;
+                showToast('Document parsed. Ready to scan for images.', 'success');
+            } catch (error) {
+                console.error(error);
+                showToast('A fatal error occurred parsing the document.', 'error');
+                resetWorkspace();
+            }
+        }
+
+        // --- Extraction execution ---
+        
+        extractBtn.addEventListener('click', async () => {
+            if (isProcessing || !documentPdf) return;
+            
+            try {
+                isProcessing = true;
+                const originalText = extractBtn.innerHTML;
+                extractBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Scanning...';
+                extractBtn.disabled = true;
+
+                outputGrid.innerHTML = '';
+                outputGrid.classList.add('hidden');
+                emptyState.classList.add('hidden');
+                loadingOverlay.classList.remove('hidden');
+
+                const totalPages = documentPdf.numPages;
                 let extractedCount = 0;
 
-                // I am iterating through each page to access its underlying rendering operators.
-                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                    statusDiv.innerText = `Scanning page ${pageNum} of ${pdf.numPages}...`;
-                    const page = await pdf.getPage(pageNum);
+                // Iterate through each page to access its underlying rendering operators
+                for (let i = 1; i <= totalPages; i++) {
+                    loadingText.innerText = `Scanning page ${i} of ${totalPages}...`;
+                    loadingProgress.style.width = `${(i / totalPages) * 100}%`;
                     
-                    // I am requesting the operator list to identify image drawing commands.
+                    const page = await documentPdf.getPage(i);
                     const ops = await page.getOperatorList();
                     
-                    for (let i = 0; i < ops.fnArray.length; i++) {
-                        const fn = ops.fnArray[i];
+                    // Filter operators for image drawing commands
+                    for (let j = 0; j < ops.fnArray.length; j++) {
+                        const fn = ops.fnArray[j];
                         
-                        // I am filtering for XObject painting operators which correspond to embedded images.
                         if (fn === pdfjsLib.OPS.paintImageXObject || fn === pdfjsLib.OPS.paintJpegXObject) {
-                            const objId = ops.argsArray[i][0];
-                            const imgObj = await new Promise(resolve => {
-                                page.objs.get(objId, (img) => resolve(img));
-                            });
+                            const objId = ops.argsArray[j][0];
+                            
+                            try {
+                                const imgObj = await new Promise(resolve => {
+                                    page.objs.get(objId, (img) => resolve(img));
+                                });
 
-                            if (imgObj && imgObj.data) {
-                                extractedCount++;
-                                
-                                // I am constructing an off-screen canvas to convert the raw pixel arrays into a downloadable format.
-                                const canvas = document.createElement('canvas');
-                                canvas.width = imgObj.width;
-                                canvas.height = imgObj.height;
-                                const ctx = canvas.getContext('2d');
-                                
-                                const imgData = ctx.createImageData(imgObj.width, imgObj.height);
-                                
-                                // I am accounting for different color space matrices.
-                                if (imgObj.data.length === imgObj.width * imgObj.height * 4) {
-                                    imgData.data.set(imgObj.data);
-                                } else if (imgObj.data.length === imgObj.width * imgObj.height * 3) {
-                                    for (let j = 0, k = 0; j < imgObj.data.length; j += 3, k += 4) {
-                                        imgData.data[k] = imgObj.data[j];
-                                        imgData.data[k+1] = imgObj.data[j+1];
-                                        imgData.data[k+2] = imgObj.data[j+2];
-                                        imgData.data[k+3] = 255;
+                                if (imgObj && imgObj.data) {
+                                    extractedCount++;
+                                    
+                                    // Reconstruct the image pixel data into a canvas
+                                    const canvas = document.createElement('canvas');
+                                    canvas.width = imgObj.width;
+                                    canvas.height = imgObj.height;
+                                    const ctx = canvas.getContext('2d');
+                                    
+                                    const imgData = ctx.createImageData(imgObj.width, imgObj.height);
+                                    
+                                    // Handle different color space data arrays (RGB vs RGBA)
+                                    if (imgObj.data.length === imgObj.width * imgObj.height * 4) {
+                                        imgData.data.set(imgObj.data);
+                                    } else if (imgObj.data.length === imgObj.width * imgObj.height * 3) {
+                                        for (let px = 0, pxa = 0; px < imgObj.data.length; px += 3, pxa += 4) {
+                                            imgData.data[pxa] = imgObj.data[px];
+                                            imgData.data[pxa+1] = imgObj.data[px+1];
+                                            imgData.data[pxa+2] = imgObj.data[px+2];
+                                            imgData.data[pxa+3] = 255;
+                                        }
                                     }
+                                    
+                                    ctx.putImageData(imgData, 0, 0);
+                                    const dataUrl = canvas.toDataURL('image/png');
+                                    
+                                    const card = createOutputCard(dataUrl, extractedCount, i, imgObj.width, imgObj.height);
+                                    outputGrid.appendChild(card);
+                                    extractionCountEl.innerText = extractedCount;
                                 }
-                                
-                                ctx.putImageData(imgData, 0, 0);
-                                const dataUrl = canvas.toDataURL('image/png');
-                                appendImageCard(dataUrl, extractedCount, pageNum);
+                            } catch (err) {
+                                console.warn(`Failed to extract image object ${objId} on page ${i}`, err);
                             }
                         }
                     }
+
+                    // Yield the main thread to prevent UI freezing
+                    await new Promise(resolve => requestAnimationFrame(resolve));
                 }
 
+                loadingOverlay.classList.add('hidden');
+                
                 if (extractedCount > 0) {
-                    statusDiv.className = 'mt-4 text-sm font-medium text-green-700 block bg-green-50 text-center p-4 rounded-xl';
-                    statusDiv.innerText = `Success. Extracted ${extractedCount} images.`;
+                    outputGrid.classList.remove('hidden');
+                    showToast(`Successfully extracted ${extractedCount} images.`, 'success');
                 } else {
-                    statusDiv.className = 'mt-4 text-sm font-medium text-orange-700 block bg-orange-50 text-center p-4 rounded-xl';
-                    statusDiv.innerText = 'No extractable embedded images found in this document.';
+                    emptyState.classList.remove('hidden');
+                    showToast('No extractable images were found.', 'info');
                 }
 
             } catch (error) {
                 console.error(error);
-                statusDiv.className = 'mt-4 text-sm font-medium text-red-700 block bg-red-50 text-center p-4 rounded-xl';
-                statusDiv.innerText = 'A parsing error occurred during extraction.';
+                showToast('An error occurred during image extraction.', 'error');
+                loadingOverlay.classList.add('hidden');
             } finally {
-                // Resetting interface state
+                extractBtn.innerHTML = '<i class="fa-solid fa-magnifying-glass mr-2"></i> Scan Again';
                 extractBtn.disabled = false;
-                extractBtn.innerText = 'Scan for Images';
+                isProcessing = false;
             }
         });
 
-        // Rendering the extracted images to the DOM
-        function appendImageCard(dataUrl, index, pageNum) {
-            const card = document.createElement('div');
-            card.className = 'bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col';
+        // Constructing the output DOM nodes
+        function createOutputCard(dataUrl, index, pageNum, width, height) {
+            const div = document.createElement('div');
+            div.className = 'image-card bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden flex flex-col relative';
+            
+            div.innerHTML = `
+                <div class="absolute top-2 left-2 z-10">
+                    <span class="bg-black/60 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm">Pg ${pageNum}</span>
+                </div>
+                <div class="absolute top-2 right-2 z-10">
+                    <span class="bg-purple-600/90 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm">#${index}</span>
+                </div>
+                <div class="relative bg-slate-100 dark:bg-slate-900 h-36 flex items-center justify-center p-3 border-b border-slate-200 dark:border-slate-800">
+                    <img src="${dataUrl}" class="max-w-full max-h-full object-contain shadow-sm bg-white" alt="Extracted Image ${index}">
+                </div>
+                <div class="p-3 flex flex-col gap-2 bg-slate-50 dark:bg-slate-900/50">
+                    <div class="text-[11px] text-center text-slate-500 dark:text-slate-400 font-medium tracking-wide">
+                        ${width} &times; ${height} px
+                    </div>
+                    <button class="download-btn w-full py-1.5 rounded-lg bg-slate-900 dark:bg-purple-600 text-white font-medium hover:bg-slate-800 dark:hover:bg-purple-700 transition-colors text-xs flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-download mr-1.5"></i> Save PNG
+                    </button>
+                </div>
+            `;
 
-            const img = document.createElement('img');
-            img.src = dataUrl;
-            img.className = 'w-full h-32 object-contain rounded-xl border border-slate-100 mb-4 bg-slate-50';
+            // Binding the local blob download trigger
+            div.querySelector('.download-btn').addEventListener('click', () => {
+                const a = document.createElement('a');
+                a.href = dataUrl;
+                a.download = `${originalFileName}_img_${index}_pg${pageNum}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            });
 
-            const dlBtn = document.createElement('a');
-            dlBtn.href = dataUrl;
-            dlBtn.download = `extracted_image_${index}.png`;
-            dlBtn.className = 'mt-auto bg-slate-900 text-white font-medium py-2 px-4 rounded-lg hover:bg-slate-800 transition-colors text-xs text-center';
-            dlBtn.innerHTML = `<i class="fa-solid fa-download mr-2"></i>Img ${index} (Pg ${pageNum})`;
+            return div;
+        }
 
-            card.appendChild(img);
-            card.appendChild(dlBtn);
-            imageContainer.appendChild(card);
+        // --- Utility functions ---
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function resetWorkspace() {
+            uploadZone.classList.remove('hidden');
+            workspace.classList.add('hidden');
+            currentFileBuffer = null;
+            documentPdf = null;
+        }
+
+        // Handling transient status alerts
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            const colors = {
+                success: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800',
+                error: 'bg-red-50 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800',
+                info: 'bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800'
+            };
+
+            const icons = {
+                success: 'fa-circle-check',
+                error: 'fa-triangle-exclamation',
+                info: 'fa-circle-info'
+            };
+
+            toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl border shadow-lg toast-enter ${colors[type]}`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icons[type]} text-lg"></i>
+                <span class="font-medium text-sm">${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.replace('toast-enter', 'toast-exit');
+                toast.addEventListener('animationend', () => toast.remove());
+            }, 4000);
         }
     </script>
 </body>
