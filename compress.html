@@ -188,9 +188,8 @@
 
         resetBtn.addEventListener('click', resetWorkspace);
 
-        // # --- 8. Document ingestion pipeline ---
-
-        // # Initializing the file stream
+        // --- 8. Document ingestion pipeline ---
+        // Initializing the file stream
         async function handleFile(file) {
             if (file.type !== 'application/pdf') {
                 showToast('Please upload a valid PDF document.', 'error');
@@ -212,9 +211,12 @@
             canvasLoading.classList.remove('hidden');
 
             try {
-                // Loading the binary buffer into memory for visualization.
-                currentFileBuffer = await file.arrayBuffer();
-                await renderDocumentThumbnail(currentFileBuffer);
+                // Instantiating a typed array to prevent memory detachment by the web worker.
+                const arrayBuffer = await file.arrayBuffer();
+                currentFileBuffer = new Uint8Array(arrayBuffer);
+                
+                // Passing a cloned slice of the memory to isolate the rendering engine.
+                await renderDocumentThumbnail(currentFileBuffer.slice(0));
             } catch (error) {
                 console.error(error);
                 showToast('A parsing error occurred during initialization.', 'error');
@@ -222,9 +224,9 @@
             }
         }
 
-        // # Generating the visual thumbnail
-        async function renderDocumentThumbnail(arrayBuffer) {
-            const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+        // Generating the visual thumbnail
+        async function renderDocumentThumbnail(safeBuffer) {
+            const loadingTask = pdfjsLib.getDocument({ data: safeBuffer });
             const pdf = await loadingTask.promise;
             
             const page = await pdf.getPage(1);
@@ -256,12 +258,14 @@
                 await new Promise(resolve => setTimeout(resolve, 50));
 
                 const { PDFDocument } = PDFLib;
+                
+                // Loading the preserved typed array into the structural manipulator.
                 const pdfDoc = await PDFDocument.load(currentFileBuffer, { ignoreEncryption: true });
                 
                 statusText.innerText = 'Applying object stream optimization...';
                 await new Promise(resolve => setTimeout(resolve, 50));
 
-                // I am utilizing object streams to heavily compress the structural metadata footprint.
+                // Executing object stream compression to reduce structural overhead.
                 const optimizedBytes = await pdfDoc.save({ useObjectStreams: true });
 
                 const oldSize = currentFile.size;
@@ -286,8 +290,9 @@
                 showToast('Document optimization complete.', 'success');
 
             } catch (error) {
-                console.error(error);
-                showToast('An error occurred during binary optimization.', 'error');
+                // Logging the stack trace to the console for accurate diagnostic review.
+                console.error('Binary optimization failure:', error);
+                showToast('An error occurred during binary optimization. The file may be encrypted.', 'error');
             } finally {
                 isProcessing = false;
                 compressBtn.disabled = false;
