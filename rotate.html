@@ -84,15 +84,15 @@
         <section id="workspace" class="hidden flex-col gap-6 w-full h-full">
             <div class="bg-white dark:bg-slate-950 p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4 sticky top-20 z-40">
                 <div class="flex items-center gap-2">
-                    <button id="selectAllBtn" class="px-3 py-2 text-sm font-medium rounded-lg border border-slate-200">Select All</button>
-                    <button id="rotLeftBtn" class="px-3 py-2 text-sm font-medium border border-slate-200 rounded-lg"><i class="fa-solid fa-rotate-left mr-1"></i> Left</button>
-                    <button id="rotRightBtn" class="px-3 py-2 text-sm font-medium border border-slate-200 rounded-lg"><i class="fa-solid fa-rotate-right mr-1"></i> Right</button>
-                    <button id="delBtn" class="px-3 py-2 text-sm font-medium text-red-600 border border-slate-200 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                    <button id="selectAllBtn" class="px-3 py-2 text-sm font-medium rounded-lg border border-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">Select All</button>
+                    <button id="rotateLeftSelectedBtn" class="px-3 py-2 text-sm font-medium border border-slate-200 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800"><i class="fa-solid fa-rotate-left mr-1"></i> Left</button>
+                    <button id="rotateRightSelectedBtn" class="px-3 py-2 text-sm font-medium border border-slate-200 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800"><i class="fa-solid fa-rotate-right mr-1"></i> Right</button>
+                    <button id="deleteSelectedBtn" class="px-3 py-2 text-sm font-medium text-red-600 border border-slate-200 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"><i class="fa-solid fa-trash"></i></button>
                 </div>
                 <div class="flex items-center gap-3">
                     <p id="fileMeta" class="text-xs text-slate-500 hidden md:block mr-2"></p>
-                    <input type="text" id="exportFilename" placeholder="rotated.pdf" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm w-40">
-                    <button id="exportBtn" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium shadow-sm"><i class="fa-solid fa-download"></i> Save PDF</button>
+                    <input type="text" id="exportFilename" placeholder="rotated.pdf" class="px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm w-40">
+                    <button id="exportBtn" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium shadow-sm hover:bg-indigo-700 transition-colors"><i class="fa-solid fa-download"></i> Save PDF</button>
                 </div>
             </div>
             <div id="pageGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 pb-20"></div>
