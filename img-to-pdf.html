@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Convert JPG & PNG Images to PDF | PDFKing</title>
+    <meta name="title" content="Convert JPG & PNG Images to PDF | PDFKing">
+    <meta name="description" content="Compile multiple photos, receipts, or sketches into a single, clean PDF document. Sort images visually and convert instantly in your browser securely.">
+    <meta name="keywords" content="JPG to PDF, PNG to PDF, image to PDF, picture to PDF converter, secure PDF tools">
+    <meta name="theme-color" content="#ec4899">
+
+    <link rel="canonical" href="https://pdfking.net/img-to-pdf.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pdfking.net/img-to-pdf.html">
+    <meta property="og:title" content="Convert JPG & PNG Images to PDF">
+    <meta property="og:description" content="Compile multiple photos into a single PDF document securely in your browser.">
+    <meta property="og:image" content="https://pdfking.net/assets/og-image.png">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://pdfking.net/img-to-pdf.html">
+    <meta property="twitter:title" content="Convert JPG & PNG Images to PDF">
+    <meta property="twitter:description" content="Compile multiple photos into a single PDF document securely in your browser.">
+    <meta property="twitter:image" content="https://pdfking.net/assets/og-image.png">
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+    <style>
+        .drag-over-zone { border-color: #ec4899 !important; background-color: rgba(236, 72, 153, 0.1) !important; }
+        
+        /* Smooth transitions for sortable cards */
+        .image-card { transition: all 0.15s ease; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .animate-pop { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <header class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <i class="fa-solid fa-file-image text-pink-600 text-xl"></i>
+                <span class="text-xl font-black tracking-tighter">PDFKing</span>
+            </a>
+            <button id="themeToggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-6 py-8 w-full flex flex-col items-center">
+        
+        <section id="uploadZone" class="flex flex-col items-center justify-center border-2 border-dashed border-pink-300 dark:border-pink-700 rounded-3xl bg-pink-50/50 hover:bg-pink-50 dark:bg-pink-900/10 dark:hover:bg-pink-900/20 transition-all cursor-pointer p-16 text-center group w-full max-w-3xl mt-8">
+            <input type="file" id="fileInput" accept="image/jpeg, image/png" multiple class="hidden">
+            <div class="w-20 h-20 bg-pink-100 dark:bg-pink-900/50 rounded-2xl flex items-center justify-center mb-6 text-pink-600 dark:text-pink-400 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-images text-4xl"></i>
+            </div>
+            <h1 id="upload-heading" class="text-3xl font-bold mb-3">JPG & PNG to PDF</h1>
+            <p class="text-slate-500 mb-6 max-w-md">Compile multiple images into a single PDF document. Drag and drop to reorder them exactly how you want.</p>
+            <button class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 rounded-xl font-medium shadow-sm transition-colors">Select Images</button>
+            <p class="text-xs text-slate-400 mt-4">Supported formats: JPG, PNG</p>
+        </section>
+
+        <div id="loadingOverlay" class="hidden flex-col items-center justify-center py-20 w-full">
+            <i class="fa-solid fa-circle-notch fa-spin text-5xl text-pink-600 mb-4"></i>
+            <p id="loadingText" class="text-lg font-medium text-slate-600 dark:text-slate-300">Processing images...</p>
+            <div class="w-64 h-2 bg-slate-200 dark:bg-slate-800 rounded-full mt-4 overflow-hidden">
+                <div id="loadingProgress" class="h-full bg-pink-600 transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <section id="workspace" class="hidden flex-col lg:flex-row gap-8 w-full mt-4">
+            
+            <div class="w-full lg:w-1/3 flex flex-col gap-6">
+                <div class="bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm sticky top-24">
+                    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-pink-600"></i> Document Settings
+                    </h2>
+                    
+                    <div class="flex flex-col gap-5">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Page Size</label>
+                            <select id="pageSizeSelect" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-pink-500">
+                                <option value="fit" selected>Fit to Image (Original Size)</option>
+                                <option value="a4">Standard A4 (Letter)</option>
+                            </select>
+                        </div>
+
+                        <button id="addMoreBtn" class="w-full border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-pink-500 text-slate-600 dark:text-slate-400 hover:text-pink-600 py-3 rounded-xl font-medium transition-colors flex justify-center items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Add More Images
+                        </button>
+
+                        <div class="h-px bg-slate-200 dark:bg-slate-800 my-2"></div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Output Name</label>
+                            <input type="text" id="exportFilename" value="compiled_images.pdf" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 outline-none">
+                        </div>
+
+                        <button id="convertBtn" class="w-full bg-pink-600 hover:bg-pink-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-pink-600/30 flex justify-center items-center gap-2 transition-colors">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Create PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full lg:w-2/3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold flex items-center gap-2">
+                        Image Queue <span id="queueCount" class="bg-pink-100 text-pink-700 dark:bg-pink-900/50 dark:text-pink-400 text-xs px-2 py-1 rounded-full">0</span>
+                    </h3>
+                    <button id="clearBtn" class="text-sm text-red-500 hover:text-red-600 transition-colors font-medium">
+                        <i class="fa-solid fa-trash-can mr-1"></i> Clear All
+                    </button>
+                </div>
+                
+                <div id="imageGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 pr-2 pb-8"></div>
+            </div>
+
+        </section>
+
+        <section id="successState" class="hidden flex-col items-center py-12 animate-pop w-full max-w-3xl">
+            <div class="w-24 h-24 bg-emerald-100 dark:bg-emerald-900/50 rounded-full flex items-center justify-center text-emerald-500 mb-6 shadow-inner">
+                <i class="fa-solid fa-check text-5xl"></i>
+            </div>
+            <h2 class="text-3xl font-black mb-2 text-center">PDF Created!</h2>
+            <p class="text-slate-500 dark:text-slate-400 text-center max-w-md mb-10 leading-relaxed">
+                Your images have been compiled into <strong id="successFileName" class="text-slate-800 dark:text-slate-200"></strong>. What would you like to do next?
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                <a href="page-numbers.html" class="flex items-center gap-4 p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-rose-400 shadow-sm transition-all group">
+                    <div class="w-12 h-12 bg-rose-50 dark:bg-rose-900/30 rounded-xl flex items-center justify-center text-rose-500 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-list-ol text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 dark:text-white">Add Page Numbers</h4>
+                        <p class="text-xs text-slate-500 mt-1">Number the photos in your new document.</p>
+                    </div>
+                </a>
+                
+                <a href="metadata.html" class="flex items-center gap-4 p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-sky-400 shadow-sm transition-all group">
+                    <div class="w-12 h-12 bg-sky-50 dark:bg-sky-900/30 rounded-xl flex items-center justify-center text-sky-500 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-tags text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 dark:text-white">Edit Metadata</h4>
+                        <p class="text-xs text-slate-500 mt-1">Add a title and author to your new file.</p>
+                    </div>
+                </a>
+            </div>
+
+            <button id="resetConvertBtn" class="mt-10 text-sm font-medium text-pink-600 dark:text-pink-400 hover:underline">
+                <i class="fa-solid fa-rotate-left mr-1"></i> Convert more images
+            </button>
+        </section>
+
+    </main>
+
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-slate-500 dark:text-slate-400">
+            
+            <div class="flex items-center gap-2 mb-4 md:mb-0">
+                <i class="fa-solid fa-crown text-xl text-slate-300 dark:text-slate-700"></i>
+                <span class="font-bold text-slate-700 dark:text-slate-300">PDFKing</span>
+            </div>
+            
+            <div class="text-center md:text-left mb-4 md:mb-0 text-sm font-medium">
+                &copy; 2026 PDFKing. Built for Privacy.
+            </div>
+
+            <div class="flex gap-6 text-sm font-medium">
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Privacy Policy</a>
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Terms of Service</a>
+            </div>
+
+        </div>
+    </footer>
+
+    <script src="js/pdfking-utils.js"></script>
+    <script src="js/tool-img-to-pdf.js"></script>
+</body>
+</html>
