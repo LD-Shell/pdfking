@@ -1,152 +1,203 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF to Image | PDFKing</title>
+    
+    <title>Convert PDF to High-Res JPG/PNG/WEBP | PDFKing</title>
+    <meta name="title" content="Convert PDF to High-Res JPG/PNG/WEBP | PDFKing">
+    <meta name="description" content="Extract specific pages of a PDF document into high-quality JPG, PNG, or WEBP image files instantly. Packaged securely as a ZIP file in your browser.">
+    <meta name="keywords" content="PDF to JPG, PDF to PNG, PDF to WEBP, extract images from PDF, PDF to image converter">
+    <meta name="theme-color" content="#f97316">
+
+    <link rel="canonical" href="https://pdfking.net/pdf-to-img.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pdfking.net/pdf-to-img.html">
+    <meta property="og:title" content="Convert PDF to High-Res Images">
+    <meta property="og:description" content="Convert PDF pages to images instantly and securely in your browser.">
+    <meta property="og:image" content="https://pdfking.net/assets/og-image.png">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://pdfking.net/pdf-to-img.html">
+    <meta property="twitter:title" content="Convert PDF to High-Res Images">
+    <meta property="twitter:description" content="Convert PDF pages to images instantly and securely in your browser.">
+    <meta property="twitter:image" content="https://pdfking.net/assets/og-image.png">
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script>
-        // Setting up the PDF.js worker
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    </script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <style>
+        .drag-over-zone { border-color: #f97316 !important; background-color: rgba(249, 115, 22, 0.1) !important; }
+        
+        .preview-scroll::-webkit-scrollbar { width: 6px; }
+        .preview-scroll::-webkit-scrollbar-track { background: transparent; }
+        .preview-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark .preview-scroll::-webkit-scrollbar-thumb { background: #475569; }
+
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .animate-pop { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
 
-    <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto w-full">
-        <a href="index.html" class="text-2xl font-black tracking-tighter text-indigo-600 hover:opacity-80 transition-opacity">PDFKing</a>
-        <a href="index.html" class="text-sm font-medium hover:text-indigo-600"><i class="fa-solid fa-arrow-left mr-2"></i>Back to Tools</a>
-    </nav>
-
-    <main class="max-w-4xl mx-auto px-6 py-12 flex-grow w-full text-center">
-        <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-6 text-orange-600">
-            <i class="fa-solid fa-image text-3xl"></i>
-        </div>
-        <h2 class="text-3xl font-extrabold mb-4">PDF to Image</h2>
-        <p class="text-slate-500 mb-8">Convert PDF pages into high-quality JPG assets directly in your browser.</p>
-
-        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm max-w-2xl mx-auto mb-8">
-            <input type="file" id="fileInput" accept="application/pdf" class="hidden">
-            <label for="fileInput" class="cursor-pointer block border-2 border-dashed border-orange-300 bg-orange-50 rounded-xl p-8 hover:bg-orange-100 transition-colors mb-6 text-center">
-                <i class="fa-solid fa-file-pdf text-4xl text-orange-400 mb-3"></i>
-                <span id="fileLabel" class="block text-orange-700 font-medium">Click to select a PDF file</span>
-            </label>
-
-            <button id="convertBtn" class="w-full bg-orange-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                Convert to Images
+    <header class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <i class="fa-solid fa-images text-orange-500 text-xl"></i>
+                <span class="text-xl font-black tracking-tighter">PDFKing</span>
+            </a>
+            <button id="themeToggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
             </button>
-            
-            <div id="status" class="mt-4 text-sm font-medium hidden text-center p-4 rounded-xl"></div>
+        </nav>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-6 py-8 w-full flex flex-col items-center">
+        
+        <section id="uploadZone" class="flex flex-col items-center justify-center border-2 border-dashed border-orange-300 dark:border-orange-700 rounded-3xl bg-orange-50/50 hover:bg-orange-50 dark:bg-orange-900/10 dark:hover:bg-orange-900/20 transition-all cursor-pointer p-16 text-center group w-full max-w-3xl mt-8">
+            <input type="file" id="fileInput" accept="application/pdf" class="hidden">
+            <div class="w-20 h-20 bg-orange-100 dark:bg-orange-900/50 rounded-2xl flex items-center justify-center mb-6 text-orange-600 dark:text-orange-400 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-file-export text-4xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold mb-3">PDF to Image</h1>
+            <p class="text-slate-500 dark:text-slate-400 mb-6 max-w-md">Extract specific pages of your PDF into high-quality JPG, PNG, or WEBP images instantly.</p>
+            <button class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-medium shadow-sm transition-colors">Select PDF File</button>
+        </section>
+
+        <div id="loadingOverlay" class="hidden flex-col items-center justify-center py-20 w-full">
+            <i class="fa-solid fa-circle-notch fa-spin text-5xl text-orange-500 mb-4"></i>
+            <p id="loadingText" class="text-lg font-medium text-slate-600 dark:text-slate-300">Reading document...</p>
+            <div class="w-64 h-2 bg-slate-200 dark:bg-slate-800 rounded-full mt-4 overflow-hidden">
+                <div id="loadingProgress" class="h-full bg-orange-500 transition-all duration-300" style="width: 0%"></div>
+            </div>
         </div>
 
-        <div id="imageContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+        <section id="workspace" class="hidden flex-col lg:flex-row gap-8 w-full mt-4">
+            
+            <div class="w-full lg:w-1/3 flex flex-col gap-6">
+                <div class="bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm sticky top-24">
+                    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-orange-500"></i> Export Settings
+                    </h2>
+                    
+                    <div class="flex flex-col gap-5">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Image Format</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="format" value="jpeg" checked class="peer hidden">
+                                    <div class="text-center py-2 border-2 border-slate-200 dark:border-slate-700 rounded-lg peer-checked:border-orange-500 peer-checked:bg-orange-50 dark:peer-checked:bg-orange-900/20 peer-checked:text-orange-600 dark:peer-checked:text-orange-400 font-medium transition-all text-sm">JPG</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="format" value="png" class="peer hidden">
+                                    <div class="text-center py-2 border-2 border-slate-200 dark:border-slate-700 rounded-lg peer-checked:border-orange-500 peer-checked:bg-orange-50 dark:peer-checked:bg-orange-900/20 peer-checked:text-orange-600 dark:peer-checked:text-orange-400 font-medium transition-all text-sm">PNG</div>
+                                </label>
+                                <label class="cursor-pointer" title="Best for websites! High quality, tiny file size.">
+                                    <input type="radio" name="format" value="webp" class="peer hidden">
+                                    <div class="text-center py-2 border-2 border-slate-200 dark:border-slate-700 rounded-lg peer-checked:border-orange-500 peer-checked:bg-orange-50 dark:peer-checked:bg-orange-900/20 peer-checked:text-orange-600 dark:peer-checked:text-orange-400 font-medium transition-all text-sm">WEBP</div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Resolution Quality</label>
+                            <select id="scaleSelect" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-orange-500">
+                                <option value="1">Standard (1x)</option>
+                                <option value="2" selected>High Quality (2x)</option>
+                                <option value="3">Ultra HD (3x) - Slower</option>
+                            </select>
+                        </div>
+
+                        <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <p class="text-sm flex justify-between mb-1"><span class="text-slate-500">Pages Selected:</span> <strong id="metaSelected" class="text-orange-600 dark:text-orange-400">0</strong></p>
+                            <p class="text-sm flex justify-between"><span class="text-slate-500">File:</span> <strong id="metaName" class="truncate w-32 text-right">file.pdf</strong></p>
+                        </div>
+
+                        <button id="extractBtn" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-orange-500/30 mt-2 flex justify-center items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fa-solid fa-download"></i> Extract Images
+                        </button>
+                    </div>
+                </div>
             </div>
+
+            <div class="w-full lg:w-2/3">
+                <div class="flex items-end justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-bold">Select Pages</h3>
+                        <div class="flex gap-4 mt-1">
+                            <button id="selectAllBtn" class="text-sm font-medium text-orange-600 dark:text-orange-400 hover:underline">Select All</button>
+                            <button id="deselectAllBtn" class="text-sm font-medium text-slate-500 hover:underline">Deselect All</button>
+                        </div>
+                    </div>
+                    <button id="resetBtn" class="text-sm font-medium text-slate-500 hover:text-orange-500 transition-colors">
+                        <i class="fa-solid fa-xmark mr-1"></i> Cancel
+                    </button>
+                </div>
+                
+                <div id="previewGrid" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 max-h-[75vh] overflow-y-auto preview-scroll pr-2 pb-8">
+                    </div>
+            </div>
+        </section>
+
+        <section id="successState" class="hidden flex-col items-center py-12 animate-pop w-full max-w-3xl">
+            <div class="w-24 h-24 bg-emerald-100 dark:bg-emerald-900/50 rounded-full flex items-center justify-center text-emerald-500 mb-6 shadow-inner">
+                <i class="fa-solid fa-check text-5xl"></i>
+            </div>
+            <h2 class="text-3xl font-black mb-2 text-center">Extraction Complete!</h2>
+            <p class="text-slate-500 dark:text-slate-400 text-center max-w-md mb-10 leading-relaxed">
+                Your images have been downloaded as <strong id="successFileName" class="text-slate-800 dark:text-slate-200"></strong>. What would you like to do next?
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                <a href="img-to-pdf.html" class="flex items-center gap-4 p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-pink-400 shadow-sm transition-all group">
+                    <div class="w-12 h-12 bg-pink-50 dark:bg-pink-900/30 rounded-xl flex items-center justify-center text-pink-500 group-hover:scale-110 transition-transform"><i class="fa-solid fa-file-image text-xl"></i></div>
+                    <div><h4 class="font-bold text-slate-800 dark:text-white">Image to PDF</h4><p class="text-xs text-slate-500 mt-1">Compile images back into a PDF file.</p></div>
+                </a>
+                <a href="extract-text.html" class="flex items-center gap-4 p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-teal-400 shadow-sm transition-all group">
+                    <div class="w-12 h-12 bg-teal-50 dark:bg-teal-900/30 rounded-xl flex items-center justify-center text-teal-500 group-hover:scale-110 transition-transform"><i class="fa-solid fa-file-lines text-xl"></i></div>
+                    <div><h4 class="font-bold text-slate-800 dark:text-white">Extract Text</h4><p class="text-xs text-slate-500 mt-1">Pull the raw text layer out of the document.</p></div>
+                </a>
+            </div>
+            <button id="resetConvertBtn" class="mt-10 text-sm font-medium text-orange-600 dark:text-orange-400 hover:underline"><i class="fa-solid fa-rotate-left mr-1"></i> Extract another file</button>
+        </section>
+
     </main>
 
-    <script>
-        const fileInput = document.getElementById('fileInput');
-        const fileLabel = document.getElementById('fileLabel');
-        const convertBtn = document.getElementById('convertBtn');
-        const statusDiv = document.getElementById('status');
-        const imageContainer = document.getElementById('imageContainer');
-        
-        let currentFile = null;
-
-        // Handle file selection
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length === 0) return;
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-slate-500 dark:text-slate-400">
             
-            currentFile = e.target.files[0];
-            fileLabel.innerText = currentFile.name;
-            convertBtn.disabled = false;
-            statusDiv.classList.add('hidden');
-            imageContainer.innerHTML = ''; // Clear previous images
-            imageContainer.classList.add('hidden');
-        });
+            <div class="flex items-center gap-2 mb-4 md:mb-0">
+                <i class="fa-solid fa-crown text-xl text-slate-300 dark:text-slate-700"></i>
+                <span class="font-bold text-slate-700 dark:text-slate-300">PDFKing</span>
+            </div>
+            
+            <div class="text-center md:text-left mb-4 md:mb-0 text-sm font-medium">
+                &copy; 2026 PDFKing. Built for Privacy.
+            </div>
 
-        // Execute conversion
-        convertBtn.addEventListener('click', async () => {
-            if (!currentFile) return;
+            <div class="flex gap-6 text-sm font-medium">
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Privacy Policy</a>
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Terms of Service</a>
+            </div>
 
-            try {
-                // Update UI state
-                convertBtn.disabled = true;
-                convertBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Converting...';
-                statusDiv.className = 'mt-4 text-sm font-medium text-slate-600 block bg-slate-50 text-center p-4 rounded-xl';
-                statusDiv.innerText = 'Loading PDF engine...';
-                imageContainer.innerHTML = '';
-                imageContainer.classList.remove('hidden');
+        </div>
+    </footer>
 
-                const fileArrayBuffer = await currentFile.arrayBuffer();
-                
-                // Load PDF document using PDF.js
-                const loadingTask = pdfjsLib.getDocument(fileArrayBuffer);
-                const pdf = await loadingTask.promise;
-                
-                statusDiv.innerText = `Processing ${pdf.numPages} pages...`;
-
-                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                    const page = await pdf.getPage(pageNum);
-                    
-                    // Set scale for high quality (e.g., 2.0 or 3.0)
-                    const scale = 2.0; 
-                    const viewport = page.getViewport({ scale: scale });
-
-                    // Prepare canvas
-                    const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-
-                    // Render PDF page into canvas context
-                    const renderContext = {
-                        canvasContext: context,
-                        viewport: viewport
-                    };
-                    await page.render(renderContext).promise;
-
-                    // Convert canvas to JPG data URL
-                    const imgDataUrl = canvas.toDataURL('image/jpeg', 0.9);
-
-                    // Create UI elements for the image
-                    createImageCard(imgDataUrl, pageNum);
-                }
-
-                statusDiv.className = 'mt-4 text-sm font-medium text-green-700 block bg-green-50 text-center p-4 rounded-xl';
-                statusDiv.innerText = 'Conversion complete! You can download your images below.';
-
-            } catch (error) {
-                console.error(error);
-                statusDiv.className = 'mt-4 text-sm font-medium text-red-700 block bg-red-50 text-center p-4 rounded-xl';
-                statusDiv.innerText = 'An error occurred while converting the document.';
-            } finally {
-                convertBtn.disabled = false;
-                convertBtn.innerText = 'Convert to Images';
-            }
-        });
-
-        // Helper function to build the image display cards
-        function createImageCard(dataUrl, pageNum) {
-            const card = document.createElement('div');
-            card.className = 'bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col';
-
-            const img = document.createElement('img');
-            img.src = dataUrl;
-            img.className = 'w-full h-auto object-contain rounded-xl border border-slate-100 mb-4 bg-slate-50';
-            img.style.maxHeight = '300px';
-
-            const dlBtn = document.createElement('a');
-            dlBtn.href = dataUrl;
-            dlBtn.download = `page_${pageNum}.jpg`;
-            dlBtn.className = 'mt-auto bg-slate-900 text-white font-medium py-2 px-4 rounded-lg hover:bg-slate-800 transition-colors text-sm';
-            dlBtn.innerHTML = `<i class="fa-solid fa-download mr-2"></i>Download Page ${pageNum}`;
-
-            card.appendChild(img);
-            card.appendChild(dlBtn);
-            imageContainer.appendChild(card);
-        }
-    </script>
+    <script src="js/pdfking-utils.js"></script>
+    <script src="js/tool-pdf-to-img.js"></script>
 </body>
 </html>
