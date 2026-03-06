@@ -1,0 +1,9 @@
+# https://pdfking.net/robots.txt
+
+User-agent: *
+Allow: /
+
+# Prevent crawlers from indexing purely legal/utility pages
+Disallow: /privacy.html
+
+Sitemap: https://pdfking.net/sitemap.xml
