@@ -1,0 +1,204 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Add Page Numbers to PDF Documents | PDFKing</title>
+    <meta name="title" content="Add Page Numbers to PDF Documents | PDFKing">
+    <meta name="description" content="Automatically stamp clean, sequential page numbers into the margins of your PDF documents. Fully customizable, fast, and processed entirely offline.">
+    <meta name="keywords" content="add page numbers to PDF, paginate PDF, insert page numbers, edit PDF pages">
+    <meta name="theme-color" content="#e11d48">
+
+    <link rel="canonical" href="https://pdfking.net/page-numbers.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pdfking.net/page-numbers.html">
+    <meta property="og:title" content="Add Page Numbers to PDF Documents">
+    <meta property="og:description" content="Automatically stamp sequential page numbers into your PDF documents securely in your browser.">
+    <meta property="og:image" content="https://pdfking.net/assets/og-image.png">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://pdfking.net/page-numbers.html">
+    <meta property="twitter:title" content="Add Page Numbers to PDF Documents">
+    <meta property="twitter:description" content="Automatically stamp sequential page numbers into your PDF documents securely in your browser.">
+    <meta property="twitter:image" content="https://pdfking.net/assets/og-image.png">
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+
+    <style>
+        .drag-over-zone { border-color: #e11d48 !important; background-color: rgba(225, 29, 72, 0.1) !important; }
+        input[type="color"] { -webkit-appearance: none; border: none; padding: 0; }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 6px; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <header class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <i class="fa-solid fa-list-ol text-rose-600 text-xl"></i>
+                <span class="text-xl font-black tracking-tighter">PDFKing</span>
+            </a>
+            <button id="themeToggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="flex-grow max-w-6xl mx-auto px-6 py-8 w-full flex flex-col items-center">
+        
+        <section id="uploadZone" class="flex flex-col items-center justify-center border-2 border-dashed border-rose-300 rounded-3xl bg-rose-50/50 hover:bg-rose-50 cursor-pointer p-16 text-center group w-full max-w-3xl mt-8 transition-colors">
+            <input type="file" id="fileInput" accept="application/pdf" class="hidden">
+            <div class="w-20 h-20 bg-rose-100 rounded-2xl flex items-center justify-center mb-6 text-rose-600 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-hashtag text-4xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold mb-3">Add Page Numbers</h1>
+            <p class="text-slate-500 mb-6 max-w-md">Automatically stamp clean, sequential page numbers into the margins of your document.</p>
+            <button class="bg-rose-600 hover:bg-rose-700 text-white px-8 py-3 rounded-xl font-medium shadow-sm transition-colors">Select PDF File</button>
+        </section>
+
+        <div id="loadingOverlay" class="hidden flex-col items-center justify-center py-20 w-full">
+            <i class="fa-solid fa-circle-notch fa-spin text-5xl text-rose-600 mb-4"></i>
+            <p id="loadingText" class="text-lg font-medium text-slate-600 dark:text-slate-300">Analyzing layout...</p>
+        </div>
+
+        <section id="workspace" class="hidden flex-col md:flex-row gap-8 w-full mt-4">
+            
+            <div class="w-full md:w-1/2 flex flex-col gap-6">
+                <div class="bg-white dark:bg-slate-950 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-rose-600"></i> Number Settings
+                    </h2>
+                    
+                    <div class="flex flex-col gap-6">
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Position</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="position" value="top-left" class="peer hidden">
+                                    <div class="text-center py-2 border-2 border-slate-200 dark:border-slate-700 rounded-lg peer-checked:border-rose-500 peer-checked:bg-rose-50 dark:peer-checked:bg-rose-900/20 text-sm transition-all">Top Left</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="position" value="top-center" class="peer hidden">
+                                    <div class="text-center py-2 border-2 border-slate-200 dark:border-slate-700 rounded-lg peer-checked:border-rose-500 peer-checked:bg-rose-50 dark:peer-checked:bg-rose-900/20 text-sm transition-all">Top Center</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="position" value="top-right" class="peer hidden">
+                                    <div class="text-center py-2 border-2 border-slate-200 dark:border-slate-700 rounded-lg peer-checked:border-rose-500 peer-checked:bg-rose-50 dark:peer-checked:bg-rose-900/20 text-sm transition-all">Top Right</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="position" value="bottom-left" class="peer hidden">
+                                    <div class="text-center py-2 border-2 border-slate-200 dark:border-slate-700 rounded-lg peer-checked:border-rose-500 peer-checked:bg-rose-50 dark:peer-checked:bg-rose-900/20 text-sm transition-all">Bottom Left</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="position" value="bottom-center" checked class="peer hidden">
+                                    <div class="text-center py-2 border-2 border-slate-200 dark:border-slate-700 rounded-lg peer-checked:border-rose-500 peer-checked:bg-rose-50 dark:peer-checked:bg-rose-900/20 font-bold text-rose-600 dark:text-rose-400 text-sm transition-all">Bottom Center</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="position" value="bottom-right" class="peer hidden">
+                                    <div class="text-center py-2 border-2 border-slate-200 dark:border-slate-700 rounded-lg peer-checked:border-rose-500 peer-checked:bg-rose-50 dark:peer-checked:bg-rose-900/20 text-sm transition-all">Bottom Right</div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Start At Page</label>
+                                <input type="number" id="startPage" value="1" min="1" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-rose-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Format</label>
+                                <select id="formatSelect" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-rose-500 outline-none">
+                                    <option value="1">1, 2, 3...</option>
+                                    <option value="Page 1">Page 1, Page 2...</option>
+                                    <option value="1 of n">1 of 10, 2 of 10...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Text Color</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="textColor" value="#000000" class="w-8 h-8 rounded cursor-pointer border border-slate-300">
+                                    <span class="text-sm font-mono text-slate-600 dark:text-slate-300" id="textColorLabel">#000000</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Background Box</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" id="useBgBox" class="w-4 h-4 text-rose-600 rounded border-slate-300 focus:ring-rose-500 cursor-pointer">
+                                    <input type="color" id="boxColor" value="#ffffff" disabled class="w-8 h-8 rounded cursor-pointer border border-slate-300 opacity-50 transition-opacity">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="h-px bg-slate-200 dark:bg-slate-800 my-2"></div>
+
+                        <input type="text" id="exportFilename" value="numbered.pdf" class="hidden">
+                        <button id="processBtn" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-rose-600/30 flex justify-center items-center gap-2 transition-colors">
+                            <i class="fa-solid fa-stamp"></i> Add Numbers & Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex flex-col items-center">
+                <div class="flex w-full justify-between items-center mb-4 px-2">
+                    <h3 class="font-bold text-slate-700 dark:text-slate-300" id="previewTitle">Document Preview</h3>
+                    <button id="resetBtn" class="text-sm font-medium text-slate-500 hover:text-rose-500 transition-colors"><i class="fa-solid fa-arrow-left mr-1"></i> New File</button>
+                </div>
+                
+                <div class="w-full max-w-sm aspect-[1/1.4] bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 shadow-md flex items-center justify-center overflow-hidden rounded-lg relative">
+                    <img id="pdfPreview" class="max-w-full max-h-full object-contain bg-white">
+                    
+                    <div id="positionIndicator" class="absolute px-2 py-1 rounded text-[11px] font-bold shadow-md bottom-6 left-1/2 -translate-x-1/2 transition-all duration-300 flex items-center justify-center" style="color: #000000; background-color: transparent; border: 1px dashed #94a3b8;">
+                        Page 1
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-slate-500 dark:text-slate-400">
+            
+            <div class="flex items-center gap-2 mb-4 md:mb-0">
+                <i class="fa-solid fa-crown text-xl text-slate-300 dark:text-slate-700"></i>
+                <span class="font-bold text-slate-700 dark:text-slate-300">PDFKing</span>
+            </div>
+            
+            <div class="text-center md:text-left mb-4 md:mb-0 text-sm font-medium">
+                &copy; 2026 PDFKing. Built for Privacy.
+            </div>
+
+            <div class="flex gap-6 text-sm font-medium">
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Privacy Policy</a>
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Terms of Service</a>
+            </div>
+
+        </div>
+    </footer>
+
+    <script src="js/pdfking-utils.js"></script>
+    <script src="js/tool-page-numbers.js"></script>
+</body>
+</html>
