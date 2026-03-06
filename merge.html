@@ -3,446 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced PDF Merge | PDFKing</title>
     
+    <title>Merge PDF Files Online Free & Secure | PDFKing</title>
+    <meta name="title" content="Merge PDF Files Online Free & Secure | PDFKing">
+    <meta name="description" content="Combine multiple PDF files into one document securely in your browser. 100% client-side merging. No servers, no uploads, total privacy.">
+    <meta name="keywords" content="merge PDF, combine PDF, secure PDF merger, join PDF files">
+    <meta name="theme-color" content="#4f46e5">
+
+    <link rel="canonical" href="https://pdfking.net/merge.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pdfking.net/merge.html">
+    <meta property="og:title" content="Merge PDF Files Online Free & Secure | PDFKing">
+    <meta property="og:description" content="Combine multiple PDF files securely in your browser. Total privacy, zero uploads.">
+    <meta property="og:image" content="https://pdfking.net/assets/og-image.png">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://pdfking.net/merge.html">
+    <meta property="twitter:title" content="Merge PDF Files Online Free & Secure | PDFKing">
+    <meta property="twitter:description" content="Combine multiple PDF files securely in your browser. Total privacy, zero uploads.">
+    <meta property="twitter:image" content="https://pdfking.net/assets/og-image.png">
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                }
-            }
-        }
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script>
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    </script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
 
     <style>
-        /* # Defining custom transitions for smooth interface interactions */
-        .file-card { transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
-        .file-card.dragging { opacity: 0.4; border: 2px dashed #3b82f6; transform: scale(0.98); }
-        .file-card.drag-over { border-top: 4px solid #3b82f6; }
+        .file-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .file-card.dragging { opacity: 0.4; border: 2px dashed #4f46e5; transform: scale(0.98); }
+        .file-card.drag-over { border-top: 4px solid #4f46e5; }
+        .drag-over-zone { border-color: #6366f1 !important; background-color: rgba(99, 102, 241, 0.1) !important; }
         
-        /* # Defining toast notification animations */
-        @keyframes slideIn { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
-        .toast-enter { animation: slideIn 0.3s forwards; }
-        .toast-exit { animation: fadeOut 0.3s forwards; }
+        /* Fun pop animation for the success state */
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
 
-    <nav class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-layer-group text-indigo-600 dark:text-indigo-500 text-xl"></i>
-                <span class="text-xl font-black tracking-tighter text-slate-900 dark:text-white">PDFKing</span>
-            </div>
-            <div class="flex items-center gap-4">
-                <button id="themeToggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Toggle Dark Mode">
-                    <i class="fa-solid fa-moon dark:hidden"></i>
-                    <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
-                </button>
-            </div>
-        </div>
-    </nav>
+    <header class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 sticky top-0 z-50">
+        <nav class="max-w-5xl mx-auto px-6 h-16 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <i class="fa-solid fa-object-group text-indigo-600 text-xl"></i>
+                <span class="text-xl font-black tracking-tighter">PDFKing</span>
+            </a>
+            <button id="themeToggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
+            </button>
+        </nav>
+    </header>
 
     <main class="flex-grow max-w-5xl mx-auto px-6 py-8 w-full flex flex-col">
         
-        <div id="uploadZone" class="flex flex-col items-center justify-center border-2 border-dashed border-indigo-300 dark:border-indigo-700 rounded-3xl bg-indigo-50/50 dark:bg-indigo-900/10 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all cursor-pointer p-12 text-center group mb-8">
+        <section id="uploadZone" class="flex flex-col items-center justify-center border-2 border-dashed border-indigo-300 dark:border-indigo-700 rounded-3xl bg-indigo-50/50 hover:bg-indigo-50 dark:bg-indigo-900/10 dark:hover:bg-indigo-900/20 transition-all cursor-pointer p-12 text-center group mb-8">
             <input type="file" id="fileInput" accept="application/pdf" multiple class="hidden">
-            <div class="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/50 rounded-2xl flex items-center justify-center mb-6 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
-                <i class="fa-solid fa-file-pdf text-4xl"></i>
+            <div class="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/50 rounded-2xl flex items-center justify-center mb-6 text-indigo-600 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-file-circle-plus text-4xl"></i>
             </div>
-            <h2 class="text-3xl font-bold mb-3">Add Documents to Merge</h2>
-            <p class="text-slate-500 dark:text-slate-400 mb-6 max-w-md">Drag and drop multiple PDF files here. You can reorder them before executing the final merge.</p>
-            <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-medium transition-colors shadow-sm">
-                Select PDF Files
-            </button>
+            <h1 id="upload-heading" class="text-3xl font-bold mb-3">Merge PDF Documents</h1>
+            <p class="text-slate-500 mb-6 max-w-md">Drag and drop multiple files here. Reorder them as needed before executing the final compilation.</p>
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-medium shadow-sm transition-colors">Select PDF Files</button>
+        </section>
+
+        <div id="loadingOverlay" class="hidden flex-col items-center justify-center py-12">
+            <i class="fa-solid fa-circle-notch fa-spin text-4xl text-indigo-600 mb-4"></i>
+            <p id="loadingText" class="text-slate-600 dark:text-slate-300 font-medium">Processing sequence...</p>
+            <div class="w-64 h-2 bg-slate-200 dark:bg-slate-800 rounded-full mt-4 overflow-hidden">
+                <div id="loadingProgress" class="h-full bg-indigo-600 transition-all duration-300" style="width: 0%"></div>
+            </div>
         </div>
 
-        <div id="workspace" class="hidden flex-col gap-6 w-full">
-            
+        <section id="workspace" class="hidden flex-col gap-6 w-full">
             <div class="bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-4 sticky top-20 z-40">
                 <div class="flex flex-col">
                     <h3 class="font-bold text-lg">Merge Queue</h3>
-                    <p id="queueMeta" class="text-sm text-slate-500 dark:text-slate-400">0 files • 0 pages total</p>
+                    <p id="queueMeta" class="text-sm text-slate-500">0 files • 0 pages total</p>
                 </div>
                 
                 <div class="flex items-center gap-3 flex-wrap">
-                    <button id="clearAllBtn" class="px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium text-red-600 dark:text-red-400 transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+                    <button id="clearAllBtn" class="px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium text-red-600 transition-all">
                         <i class="fa-solid fa-trash-can mr-2"></i> Clear All
                     </button>
-                    
                     <div class="h-8 w-px bg-slate-200 dark:bg-slate-800 hidden md:block"></div>
-
                     <div class="flex items-center gap-2">
-                        <input type="text" id="exportFilename" placeholder="merged_document.pdf" value="merged_document.pdf" class="px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none w-48">
-                        <button id="mergeBtn" class="bg-slate-900 dark:bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-slate-800 dark:hover:bg-indigo-700 transition-colors flex items-center shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                        <input type="text" id="exportFilename" value="merged_document.pdf" class="px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none w-48">
+                        <button id="mergeBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium shadow-sm transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed">
                             <i class="fa-solid fa-object-group mr-2"></i> Merge Files
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div id="loadingOverlay" class="py-12 flex flex-col items-center justify-center hidden">
-                <i class="fa-solid fa-circle-notch fa-spin text-4xl text-indigo-600 dark:text-indigo-500 mb-4"></i>
-                <p id="loadingText" class="text-slate-600 dark:text-slate-400 font-medium">Processing documents...</p>
-                <div class="w-64 h-2 bg-slate-200 dark:bg-slate-800 rounded-full mt-4 overflow-hidden">
-                    <div id="loadingProgress" class="h-full bg-indigo-600 transition-all duration-300" style="width: 0%"></div>
-                </div>
+            <div id="fileList" class="flex flex-col gap-3"></div>
+        </section>
+
+        <section id="successState" class="hidden flex-col items-center py-12 animate-pop">
+            <div class="w-24 h-24 bg-emerald-100 dark:bg-emerald-900/50 rounded-full flex items-center justify-center text-emerald-500 mb-6 shadow-inner">
+                <i class="fa-solid fa-check text-5xl"></i>
+            </div>
+            <h2 class="text-3xl font-black mb-2 text-center">Merge Complete!</h2>
+            <p class="text-slate-500 dark:text-slate-400 text-center max-w-md mb-10 leading-relaxed">
+                Your new file <strong id="successFileName" class="text-slate-800 dark:text-slate-200"></strong> has been downloaded to your device. What would you like to do next?
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
+                <a href="page-numbers.html" class="flex items-center gap-4 p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-rose-400 dark:hover:border-rose-500 shadow-sm hover:shadow-md transition-all group">
+                    <div class="w-12 h-12 bg-rose-50 dark:bg-rose-900/30 rounded-xl flex items-center justify-center text-rose-500 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-list-ol text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 dark:text-white">Add Page Numbers</h4>
+                        <p class="text-xs text-slate-500 mt-1">Stamp sequential numbers on your new merged file.</p>
+                    </div>
+                </a>
+                
+                <a href="watermark.html" class="flex items-center gap-4 p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-purple-400 dark:hover:border-purple-500 shadow-sm hover:shadow-md transition-all group">
+                    <div class="w-12 h-12 bg-purple-50 dark:bg-purple-900/30 rounded-xl flex items-center justify-center text-purple-500 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-stamp text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 dark:text-white">Add Watermark</h4>
+                        <p class="text-xs text-slate-500 mt-1">Protect your new document with a custom text overlay.</p>
+                    </div>
+                </a>
             </div>
 
-            <div id="fileList" class="flex flex-col gap-3">
-                </div>
+            <button id="resetMergeBtn" class="mt-10 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline">
+                <i class="fa-solid fa-rotate-left mr-1"></i> Merge more files
+            </button>
+        </section>
 
-        </div>
     </main>
 
-    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
-
-    <script>
-        // # --- 6. State management ---
-        // I am maintaining a structured array of file objects to preserve metadata, binary buffers, and sorting order.
-        let fileQueue = [];
-        let isProcessing = false;
-        let dragStartIndex = null;
-
-        // # Selecting DOM elements
-        const themeToggle = document.getElementById('themeToggle');
-        const uploadZone = document.getElementById('uploadZone');
-        const fileInput = document.getElementById('fileInput');
-        const workspace = document.getElementById('workspace');
-        const fileList = document.getElementById('fileList');
-        const queueMeta = document.getElementById('queueMeta');
-        const mergeBtn = document.getElementById('mergeBtn');
-        const clearAllBtn = document.getElementById('clearAllBtn');
-        const exportFilename = document.getElementById('exportFilename');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const loadingText = document.getElementById('loadingText');
-        const loadingProgress = document.getElementById('loadingProgress');
-
-        // # --- 7. Application behavior ---
-
-        // # Handling dark mode toggle
-        themeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-        });
-
-        // # Binding drag and drop events for the upload zone
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            uploadZone.addEventListener(eventName, preventDefaults, false);
-            document.body.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            uploadZone.addEventListener(eventName, () => {
-                uploadZone.classList.add('border-indigo-500', 'bg-indigo-100', 'dark:bg-indigo-900/40');
-            });
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            uploadZone.addEventListener(eventName, () => {
-                uploadZone.classList.remove('border-indigo-500', 'bg-indigo-100', 'dark:bg-indigo-900/40');
-            });
-        });
-
-        uploadZone.addEventListener('drop', (e) => {
-            const dt = e.dataTransfer;
-            const files = Array.from(dt.files);
-            if (files.length) handleFiles(files);
-        });
-
-        uploadZone.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length) handleFiles(Array.from(e.target.files));
-        });
-
-        // # --- 8. Document ingestion pipeline ---
-
-        // # Initializing file handling
-        async function handleFiles(files) {
-            const pdfFiles = files.filter(file => file.type === 'application/pdf');
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-slate-500 dark:text-slate-400">
             
-            if (pdfFiles.length === 0) {
-                showToast('Please upload valid PDF documents.', 'error');
-                return;
-            }
-
-            workspace.classList.remove('hidden');
-            loadingOverlay.classList.remove('hidden');
-            uploadZone.classList.replace('mb-8', 'mb-6');
-            uploadZone.querySelector('h2').innerText = 'Add More Documents';
+            <div class="flex items-center gap-2 mb-4 md:mb-0">
+                <i class="fa-solid fa-crown text-xl text-slate-300 dark:text-slate-700"></i>
+                <span class="font-bold text-slate-700 dark:text-slate-300">PDFKing</span>
+            </div>
             
-            for (let i = 0; i < pdfFiles.length; i++) {
-                const file = pdfFiles[i];
-                loadingText.innerText = `Analyzing ${file.name}...`;
-                loadingProgress.style.width = `${((i + 1) / pdfFiles.length) * 100}%`;
-                
-                try {
-                    // I am extracting the binary buffer and rasterizing the first page for immediate visual context.
-                    const arrayBuffer = await file.arrayBuffer();
-                    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-                    const numPages = pdf.numPages;
-                    
-                    const page = await pdf.getPage(1);
-                    const viewport = page.getViewport({ scale: 0.5 });
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d', { alpha: false });
-                    canvas.width = viewport.width;
-                    canvas.height = viewport.height;
-                    
-                    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-                    
-                    const thumbnailData = canvas.toDataURL('image/jpeg', 0.8);
-                    
-                    fileQueue.push({
-                        id: 'id_' + Math.random().toString(36).substr(2, 9),
-                        file: file,
-                        arrayBuffer: arrayBuffer,
-                        numPages: numPages,
-                        thumbnail: thumbnailData
-                    });
+            <div class="text-center md:text-left mb-4 md:mb-0 text-sm font-medium">
+                &copy; 2026 PDFKing. Built for Privacy.
+            </div>
 
-                } catch (error) {
-                    console.error(`Error parsing ${file.name}:`, error);
-                    showToast(`Failed to parse ${file.name}`, 'error');
-                }
-            }
+            <div class="flex gap-6 text-sm font-medium">
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Privacy Policy</a>
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Terms of Service</a>
+            </div>
 
-            loadingOverlay.classList.add('hidden');
-            renderFileList();
-            updateQueueMeta();
-        }
+        </div>
+    </footer>
 
-        // # --- 9. Interface rendering and drag-and-drop logic ---
-
-        // # Rebuilding the visual list based on the current state array
-        function renderFileList() {
-            fileList.innerHTML = '';
-            
-            fileQueue.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = 'file-card flex items-center bg-white dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm cursor-grab active:cursor-grabbing';
-                card.draggable = true;
-                card.dataset.index = index;
-                
-                card.innerHTML = `
-                    <div class="px-3 text-slate-400 dark:text-slate-500 cursor-grab">
-                        <i class="fa-solid fa-grip-vertical"></i>
-                    </div>
-                    <div class="h-16 w-12 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded flex-shrink-0 overflow-hidden ml-2 mr-4 flex items-center justify-center">
-                        <img src="${item.thumbnail}" class="max-w-full max-h-full object-contain" alt="Thumbnail">
-                    </div>
-                    <div class="flex-grow min-w-0">
-                        <h4 class="font-semibold text-sm truncate" title="${item.file.name}">${item.file.name}</h4>
-                        <div class="flex items-center text-xs text-slate-500 dark:text-slate-400 mt-1 gap-3">
-                            <span><i class="fa-regular fa-file-lines mr-1"></i>${item.numPages} ${item.numPages === 1 ? 'Page' : 'Pages'}</span>
-                            <span><i class="fa-solid fa-weight-hanging mr-1"></i>${formatBytes(item.file.size)}</span>
-                        </div>
-                    </div>
-                    <div class="pl-4 border-l border-slate-100 dark:border-slate-800 ml-4 flex items-center">
-                        <button class="remove-btn p-2 text-slate-400 hover:text-red-500 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900" title="Remove file">
-                            <i class="fa-solid fa-xmark text-lg"></i>
-                        </button>
-                    </div>
-                `;
-
-                // Binding removal logic
-                card.querySelector('.remove-btn').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    fileQueue.splice(index, 1);
-                    renderFileList();
-                    updateQueueMeta();
-                });
-
-                // I am implementing native HTML5 drag-and-drop to avoid external dependencies.
-                card.addEventListener('dragstart', handleDragStart);
-                card.addEventListener('dragover', handleDragOver);
-                card.addEventListener('dragleave', handleDragLeave);
-                card.addEventListener('drop', handleDrop);
-                card.addEventListener('dragend', handleDragEnd);
-
-                fileList.appendChild(card);
-            });
-            
-            mergeBtn.disabled = fileQueue.length < 2;
-        }
-
-        function handleDragStart(e) {
-            dragStartIndex = parseInt(this.dataset.index);
-            this.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-            // Setting dummy data is required for Firefox compatibility
-            e.dataTransfer.setData('text/plain', dragStartIndex); 
-        }
-
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-            if (!this.classList.contains('dragging')) {
-                this.classList.add('drag-over');
-            }
-            return false;
-        }
-
-        function handleDragLeave(e) {
-            this.classList.remove('drag-over');
-        }
-
-        function handleDrop(e) {
-            e.stopPropagation();
-            this.classList.remove('drag-over');
-            
-            const dragEndIndex = parseInt(this.dataset.index);
-            if (dragStartIndex !== null && dragStartIndex !== dragEndIndex) {
-                // Reordering the state array
-                const itemToMove = fileQueue.splice(dragStartIndex, 1)[0];
-                fileQueue.splice(dragEndIndex, 0, itemToMove);
-                renderFileList();
-            }
-            return false;
-        }
-
-        function handleDragEnd(e) {
-            this.classList.remove('dragging');
-            document.querySelectorAll('.file-card').forEach(c => c.classList.remove('drag-over'));
-            dragStartIndex = null;
-        }
-
-        function updateQueueMeta() {
-            const totalPages = fileQueue.reduce((acc, curr) => acc + curr.numPages, 0);
-            const totalSize = fileQueue.reduce((acc, curr) => acc + curr.file.size, 0);
-            queueMeta.innerText = `${fileQueue.length} files • ${totalPages} pages • ${formatBytes(totalSize)}`;
-            
-            if (fileQueue.length === 0) {
-                workspace.classList.add('hidden');
-                uploadZone.classList.replace('mb-6', 'mb-8');
-                uploadZone.querySelector('h2').innerText = 'Add Documents to Merge';
-            }
-        }
-
-        clearAllBtn.addEventListener('click', () => {
-            fileQueue = [];
-            renderFileList();
-            updateQueueMeta();
-        });
-
-        // # --- 10. Binary generation and export ---
-        
-        mergeBtn.addEventListener('click', async () => {
-            if (isProcessing || fileQueue.length < 2) return;
-            
-            try {
-                isProcessing = true;
-                const originalText = mergeBtn.innerHTML;
-                mergeBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Merging...';
-                mergeBtn.classList.add('opacity-75', 'cursor-not-allowed');
-                
-                loadingOverlay.classList.remove('hidden');
-                fileList.classList.add('hidden');
-
-                const { PDFDocument } = PDFLib;
-                // I am initializing an empty master document to receive the constituent page streams.
-                const mergedPdf = await PDFDocument.create();
-
-                for (let i = 0; i < fileQueue.length; i++) {
-                    loadingText.innerText = `Merging document ${i + 1} of ${fileQueue.length}...`;
-                    loadingProgress.style.width = `${((i + 1) / fileQueue.length) * 100}%`;
-                    
-                    const pdfDoc = await PDFDocument.load(fileQueue[i].arrayBuffer);
-                    const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-                    copiedPages.forEach((page) => mergedPdf.addPage(page));
-                }
-
-                loadingText.innerText = 'Compiling final binary structure...';
-                const mergedPdfBytes = await mergedPdf.save();
-
-                const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
-                const url = URL.createObjectURL(blob);
-                
-                const finalFilename = exportFilename.value.trim() || 'merged_document.pdf';
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = finalFilename.endsWith('.pdf') ? finalFilename : `${finalFilename}.pdf`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-
-                showToast('Documents merged successfully.', 'success');
-
-                // Restoring interface state
-                mergeBtn.innerHTML = originalText;
-                mergeBtn.classList.remove('opacity-75', 'cursor-not-allowed');
-                loadingOverlay.classList.add('hidden');
-                fileList.classList.remove('hidden');
-                isProcessing = false;
-
-            } catch (error) {
-                console.error(error);
-                showToast('An error occurred during binary compilation.', 'error');
-                mergeBtn.innerHTML = '<i class="fa-solid fa-object-group mr-2"></i> Merge Files';
-                mergeBtn.classList.remove('opacity-75', 'cursor-not-allowed');
-                loadingOverlay.classList.add('hidden');
-                fileList.classList.remove('hidden');
-                isProcessing = false;
-            }
-        });
-
-        // # --- 11. Utility functions ---
-
-        function formatBytes(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        // I am maintaining a unified toast mechanism for user feedback.
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            
-            const colors = {
-                success: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800',
-                error: 'bg-red-50 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800',
-                info: 'bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800'
-            };
-
-            const icons = {
-                success: 'fa-circle-check',
-                error: 'fa-triangle-exclamation',
-                info: 'fa-circle-info'
-            };
-
-            toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl border shadow-lg toast-enter ${colors[type]}`;
-            toast.innerHTML = `
-                <i class="fa-solid ${icons[type]} text-lg"></i>
-                <span class="font-medium text-sm">${message}</span>
-            `;
-
-            container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.replace('toast-enter', 'toast-exit');
-                toast.addEventListener('animationend', () => toast.remove());
-            }, 4000);
-        }
-    </script>
+    <script src="js/pdfking-utils.js"></script>
+    <script src="js/tool-merge.js"></script>
 </body>
 </html>
