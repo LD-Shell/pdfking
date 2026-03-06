@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,7 +47,8 @@
         input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
         input[type="color"]::-webkit-color-swatch { border: none; border-radius: 6px; }
         input[type=range] { -webkit-appearance: none; background: transparent; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #9333ea; cursor: pointer; margin-top: -6px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #9333ea; cursor: pointer; margin-top: -6px; transition: transform 0.1s; }
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #cbd5e1; border-radius: 2px; }
         .dark input[type=range]::-webkit-slider-runnable-track { background: #475569; }
     </style>
@@ -65,11 +68,11 @@
         </nav>
     </header>
 
-    <main class="flex-grow max-w-6xl mx-auto px-6 py-8 w-full flex flex-col items-center">
+    <main class="flex-grow max-w-7xl mx-auto px-6 py-8 w-full flex flex-col items-center">
         
-        <section id="uploadZone" class="flex flex-col items-center justify-center border-2 border-dashed border-purple-300 rounded-3xl bg-purple-50/50 hover:bg-purple-50 cursor-pointer p-16 text-center group w-full max-w-3xl mt-8 transition-colors">
+        <section id="uploadZone" class="flex flex-col items-center justify-center border-2 border-dashed border-purple-300 dark:border-purple-700/50 rounded-3xl bg-purple-50/50 hover:bg-purple-50 dark:bg-purple-900/10 dark:hover:bg-purple-900/20 cursor-pointer p-16 text-center group w-full max-w-3xl mt-8 transition-colors">
             <input type="file" id="fileInput" accept="application/pdf" class="hidden">
-            <div class="w-20 h-20 bg-purple-100 rounded-2xl flex items-center justify-center mb-6 text-purple-600 group-hover:scale-110 transition-transform">
+            <div class="w-20 h-20 bg-purple-100 dark:bg-purple-900/50 rounded-2xl flex items-center justify-center mb-6 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
                 <i class="fa-solid fa-certificate text-4xl"></i>
             </div>
             <h1 class="text-3xl font-bold mb-3">Add Watermark</h1>
@@ -79,57 +82,56 @@
 
         <div id="loadingOverlay" class="hidden flex-col items-center justify-center py-20 w-full">
             <i class="fa-solid fa-circle-notch fa-spin text-5xl text-purple-600 mb-4"></i>
-            <p id="loadingText" class="text-lg font-medium text-slate-600 dark:text-slate-300">Loading document...</p>
+            <p id="loadingText" class="text-lg font-medium text-slate-600 dark:text-slate-300 mt-4">Loading document...</p>
         </div>
 
-        <section id="workspace" class="hidden flex-col md:flex-row gap-8 w-full mt-4">
+        <section id="workspace" class="hidden flex-col gap-8 w-full max-w-5xl mx-auto mt-4">
             
-            <div class="w-full md:w-1/2 flex flex-col gap-6">
-                <div class="bg-white dark:bg-slate-950 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+            <div class="bg-white dark:bg-slate-950 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col md:flex-row">
+                
+                <div class="w-full md:w-1/2 p-8 flex flex-col gap-6">
+                    <h2 class="text-xl font-bold mb-2 flex items-center gap-2">
                         <i class="fa-solid fa-sliders text-purple-600"></i> Watermark Settings
                     </h2>
                     
                     <div class="flex flex-col gap-6">
-                        
                         <div>
                             <label class="block text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Watermark Text</label>
-                            <input type="text" id="wmText" value="CONFIDENTIAL" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-lg font-bold focus:ring-2 focus:ring-purple-500 outline-none placeholder-slate-400">
+                            <input type="text" id="wmText" value="CONFIDENTIAL" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-lg font-bold focus:ring-2 focus:ring-purple-500 outline-none placeholder-slate-400 transition-all">
                         </div>
 
-                        <div class="grid grid-cols-2 gap-6">
-                            
+                        <div class="grid grid-cols-2 gap-8">
                             <div>
                                 <label class="block text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Position</label>
                                 <div class="grid grid-cols-3 gap-1 w-full aspect-square bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-1 rounded-lg">
-                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="top-left" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50"></div></label>
-                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="top-center" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50"></div></label>
-                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="top-right" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50"></div></label>
-                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="middle-left" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50"></div></label>
-                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="middle-center" checked class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-500 peer-checked:shadow-inner"></div></label>
-                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="middle-right" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50"></div></label>
-                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="bottom-left" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50"></div></label>
-                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="bottom-center" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50"></div></label>
-                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="bottom-right" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50"></div></label>
+                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="top-left" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50 transition-colors"></div></label>
+                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="top-center" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50 transition-colors"></div></label>
+                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="top-right" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50 transition-colors"></div></label>
+                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="middle-left" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50 transition-colors"></div></label>
+                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="middle-center" checked class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-500 peer-checked:shadow-inner transition-colors"></div></label>
+                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="middle-right" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50 transition-colors"></div></label>
+                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="bottom-left" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50 transition-colors"></div></label>
+                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="bottom-center" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50 transition-colors"></div></label>
+                                    <label class="cursor-pointer border border-transparent hover:border-purple-300 rounded flex items-center justify-center"><input type="radio" name="wmPos" value="bottom-right" class="hidden peer"><div class="w-full h-full rounded peer-checked:bg-purple-200 dark:peer-checked:bg-purple-800/50 transition-colors"></div></label>
                                 </div>
                             </div>
 
-                            <div class="flex flex-col gap-4 justify-center">
+                            <div class="flex flex-col gap-5 justify-center">
                                 <div>
-                                    <label class="flex justify-between text-xs font-bold text-slate-500 uppercase mb-1">
-                                        <span>Size</span> <span id="valSize">64px</span>
+                                    <label class="flex justify-between text-xs font-bold text-slate-500 uppercase mb-2">
+                                        <span>Size</span> <span id="valSize" class="text-purple-600 dark:text-purple-400">64px</span>
                                     </label>
                                     <input type="range" id="wmSize" min="12" max="150" value="64" class="w-full">
                                 </div>
                                 <div>
-                                    <label class="flex justify-between text-xs font-bold text-slate-500 uppercase mb-1">
-                                        <span>Rotation</span> <span id="valRot">45°</span>
+                                    <label class="flex justify-between text-xs font-bold text-slate-500 uppercase mb-2">
+                                        <span>Rotation</span> <span id="valRot" class="text-purple-600 dark:text-purple-400">-45°</span>
                                     </label>
-                                    <input type="range" id="wmRot" min="-90" max="90" value="45" step="1" class="w-full">
+                                    <input type="range" id="wmRot" min="-90" max="90" value="-45" step="1" class="w-full">
                                 </div>
                                 <div>
-                                    <label class="flex justify-between text-xs font-bold text-slate-500 uppercase mb-1">
-                                        <span>Opacity</span> <span id="valOpac">30%</span>
+                                    <label class="flex justify-between text-xs font-bold text-slate-500 uppercase mb-2">
+                                        <span>Opacity</span> <span id="valOpac" class="text-purple-600 dark:text-purple-400">30%</span>
                                     </label>
                                     <input type="range" id="wmOpac" min="5" max="100" value="30" class="w-full">
                                 </div>
@@ -138,57 +140,77 @@
 
                         <div class="flex items-center gap-4 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
                             <label class="block text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Color</label>
-                            <input type="color" id="wmColor" value="#94a3b8" class="w-10 h-10 rounded cursor-pointer border border-slate-300 shadow-sm">
+                            <input type="color" id="wmColor" value="#94a3b8" class="w-10 h-10 rounded cursor-pointer border border-slate-300 dark:border-slate-600 shadow-sm">
                             <span class="text-sm font-mono text-slate-600 dark:text-slate-300" id="colorLabel">#94A3B8</span>
                         </div>
 
                         <div class="h-px bg-slate-200 dark:bg-slate-800 my-2"></div>
 
-                        <input type="text" id="exportFilename" value="watermarked.pdf" class="hidden">
-                        <button id="processBtn" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-purple-600/30 flex justify-center items-center gap-2 transition-colors">
-                            <i class="fa-solid fa-stamp"></i> Add Watermark
-                        </button>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Save As</label>
+                            <div class="flex items-center gap-3">
+                                <input type="text" id="exportFilename" value="watermarked.pdf" class="flex-grow px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm outline-none focus:ring-2 focus:ring-purple-500">
+                                <button id="processBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold shadow-md shadow-purple-600/20 flex justify-center items-center gap-2 transition-colors whitespace-nowrap">
+                                    <i class="fa-solid fa-stamp"></i> Apply Watermark
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="w-full md:w-1/2 flex flex-col items-center">
-                <div class="flex w-full justify-between items-center mb-4 px-2">
-                    <h3 class="font-bold text-slate-700 dark:text-slate-300" id="previewTitle">Document Preview</h3>
-                    <button id="resetBtn" class="text-sm font-medium text-slate-500 hover:text-purple-500 transition-colors"><i class="fa-solid fa-arrow-left mr-1"></i> New File</button>
-                </div>
-                
-                <div class="w-full max-w-sm aspect-[1/1.4] bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 shadow-md flex items-center justify-center overflow-hidden rounded-lg relative">
-                    <img id="pdfPreview" class="max-w-full max-h-full object-contain bg-white">
+                <div class="w-full md:w-1/2 bg-slate-100 dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 p-8 flex flex-col items-center justify-center relative">
+                    <div class="flex w-full justify-between items-center absolute top-6 left-0 px-8">
+                        <h3 class="font-bold text-slate-700 dark:text-slate-300 text-sm uppercase tracking-wider" id="previewTitle">Live Preview</h3>
+                        <button id="resetBtn" class="text-sm font-medium text-slate-500 hover:text-purple-600 transition-colors"><i class="fa-solid fa-arrow-left mr-1"></i> New File</button>
+                    </div>
                     
-                    <div id="wmOverlay" class="absolute font-bold whitespace-nowrap pointer-events-none transition-all duration-100 ease-linear flex items-center justify-center" style="opacity: 0.3; transform: rotate(-45deg); font-size: 32px; color: #94a3b8;">
-                        CONFIDENTIAL
+                    <div class="w-full max-w-sm aspect-[1/1.4] bg-white shadow-xl flex items-center justify-center overflow-hidden rounded relative mt-8">
+                        <img id="pdfPreview" class="max-w-full max-h-full object-contain">
+                        
+                        <div id="wmOverlay" class="absolute font-bold whitespace-nowrap pointer-events-none transition-all duration-75 ease-linear flex items-center justify-center" style="opacity: 0.3; transform: rotate(-45deg); font-size: 32px; color: #94a3b8;">
+                            CONFIDENTIAL
+                        </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </section>
+
+        <section id="nextSteps" class="hidden mt-10 bg-purple-50 dark:bg-purple-900/10 border border-purple-200 dark:border-purple-800/50 rounded-3xl p-8 text-center max-w-2xl mx-auto w-full shadow-sm">
+            <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-sm">
+                <i class="fa-solid fa-check-double"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-2">Watermark Applied Successfully!</h2>
+            <p class="text-slate-600 dark:text-slate-400 mb-8">Your custom watermark has been stamped on every page. What's next?</p>
+            
+            <div class="grid sm:grid-cols-2 gap-4">
+                <a href="flatten.html" class="flex items-center justify-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl hover:border-purple-500 hover:shadow-md transition-all font-medium">
+                    <i class="fa-solid fa-lock text-purple-500"></i> Flatten & Lock PDF
+                </a>
+                <a href="compress.html" class="flex items-center justify-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl hover:border-purple-500 hover:shadow-md transition-all font-medium">
+                    <i class="fa-solid fa-compress text-blue-500"></i> Compress File Size
+                </a>
+            </div>
+            <button id="startOverBtn" class="mt-6 text-sm text-slate-500 hover:text-purple-600 font-medium underline">Watermark another document</button>
+        </section>
+
     </main>
 
     <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-12">
-            <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-slate-500 dark:text-slate-400">
-                
-                <div class="flex items-center gap-2 mb-4 md:mb-0">
-                    <i class="fa-solid fa-crown text-xl text-slate-300 dark:text-slate-700"></i>
-                    <span class="font-bold text-slate-700 dark:text-slate-300">PDFKing</span>
-                </div>
-                
-                <div class="text-center md:text-left mb-4 md:mb-0 text-sm font-medium">
-                    &copy; 2026 PDFKing. Built for Privacy.
-                </div>
-
-                <div class="flex gap-6 text-sm font-medium">
-                    <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Privacy Policy</a>
-                    <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Terms of Service</a>
-                </div>
-
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-slate-500 dark:text-slate-400">
+            <div class="flex items-center gap-2 mb-4 md:mb-0">
+                <i class="fa-solid fa-stamp text-xl text-slate-300 dark:text-slate-700"></i>
+                <span class="font-bold text-slate-700 dark:text-slate-300">PDFKing</span>
             </div>
-        </footer>
+            <div class="text-center md:text-left mb-4 md:mb-0 text-sm font-medium">
+                &copy; 2026 PDFKing. Built for Privacy.
+            </div>
+            <div class="flex gap-6 text-sm font-medium">
+                <a href="privacy.html" class="hover:text-purple-500 transition-colors">Privacy Policy</a>
+                <a href="terms.html" class="hover:text-purple-500 transition-colors">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
 
     <script src="js/pdfking-utils.js"></script>
     <script src="js/tool-watermark.js"></script>
