@@ -6,8 +6,8 @@
     
     <title>PDFKing | Free Secure Client-Side PDF Tools</title>
     <meta name="title" content="PDFKing | Free Secure Client-Side PDF Tools">
-    <meta name="description" content="Fast, free, and secure browser-based PDF tools. Merge, convert, flatten, and edit PDFs locally without uploading files to a server.">
-    <meta name="keywords" content="PDF tools, merge PDF, secure PDF editor, client side PDF, flatten PDF, free PDF tools">
+    <meta name="description" content="Fast, free, and secure browser-based PDF tools. Merge, split, delete pages, and edit PDFs locally without uploading files to a server.">
+    <meta name="keywords" content="PDF tools, merge PDF, split PDF, delete pdf pages, secure PDF editor, client side PDF, free PDF tools">
     <meta name="author" content="PDFKing">
     <meta name="theme-color" content="#4f46e5">
 
@@ -125,7 +125,7 @@
         </h1>
         
         <p class="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 max-w-2xl leading-relaxed">
-            Edit, merge, and convert your PDFs instantly. Everything happens securely inside your browser's memory—no waiting for uploads, no subscriptions required.
+            Edit, merge, split, and convert your PDFs instantly. Everything happens securely inside your browser's memory—no waiting for uploads, no subscriptions required.
         </p>
         
         <a href="#tools" class="bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 px-8 py-4 rounded-2xl font-bold text-lg transition-colors shadow-xl flex items-center gap-3">
@@ -134,39 +134,59 @@
     </header>
 
     <main id="tools" class="max-w-7xl mx-auto px-6 pb-32 w-full scroll-mt-24">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <h2 class="text-2xl font-bold mb-8 flex items-center gap-2 text-slate-800 dark:text-slate-200">
+            <i class="fa-solid fa-layer-group text-indigo-500"></i> Most Popular Tools
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             
-            <a href="merge.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 relative overflow-hidden">
-                <div class="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/50 rounded-2xl flex items-center justify-center mb-6 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
-                    <i class="fa-solid fa-object-group text-2xl"></i>
+            <a href="merge.html" class="tool-card group block p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 relative overflow-hidden">
+                <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/50 rounded-2xl flex items-center justify-center mb-4 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-object-group text-xl"></i>
                 </div>
-                <h3 class="text-2xl font-bold mb-3">Merge PDFs</h3>
-                <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Combine multiple files into one seamless document in seconds. Drag, drop, and compile.</p>
-                <div class="absolute bottom-8 right-8 text-indigo-600 dark:text-indigo-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
+                <h3 class="text-xl font-bold mb-2">Merge PDFs</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Combine multiple files into one seamless document.</p>
             </a>
 
-            <a href="rotate.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 relative overflow-hidden">
-                <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900/50 rounded-2xl flex items-center justify-center mb-6 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
-                    <i class="fa-solid fa-rotate text-2xl"></i>
+            <a href="split.html" class="tool-card group block p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400 dark:hover:border-emerald-500 relative overflow-hidden">
+                <div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/50 rounded-2xl flex items-center justify-center mb-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-scissors text-xl"></i>
                 </div>
-                <h3 class="text-2xl font-bold mb-3">Organize & Rotate</h3>
-                <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Visually reorder pages, fix upside-down scans, or delete pages you don't need from your file.</p>
-                <div class="absolute bottom-8 right-8 text-blue-600 dark:text-blue-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
+                <h3 class="text-xl font-bold mb-2">Split PDF</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Extract ranges or separate a document into multiple files.</p>
             </a>
+
+            <a href="delete.html" class="tool-card group block p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-red-400 dark:hover:border-red-500 relative overflow-hidden">
+                <div class="w-12 h-12 bg-red-100 dark:bg-red-900/50 rounded-2xl flex items-center justify-center mb-4 text-red-600 dark:text-red-400 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-trash-can text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Delete Pages</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Remove unwanted pages securely from your document.</p>
+            </a>
+
+            <a href="rotate.html" class="tool-card group block p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 relative overflow-hidden">
+                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-2xl flex items-center justify-center mb-4 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-rotate text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Rotate & Organize PDF</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Fix upside-down scans and visually reorder pages.</p>
+            </a>
+
+        </div>
+
+        <h2 class="text-2xl font-bold mb-8 flex items-center gap-2 text-slate-800 dark:text-slate-200 mt-16">
+            <i class="fa-solid fa-wand-magic-sparkles text-purple-500"></i> Editing & Conversion
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             <a href="flatten.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400 dark:hover:border-emerald-500 relative overflow-hidden">
                 <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/50 rounded-2xl flex items-center justify-center mb-6 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-file-shield text-2xl"></i>
                 </div>
                 <h3 class="text-2xl font-bold mb-3">Flatten Forms</h3>
-                <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Lock interactive form fields permanently. Convert text boxes and checkboxes into uneditable graphics.</p>
-                <div class="absolute bottom-8 right-8 text-emerald-600 dark:text-emerald-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
+                <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Lock interactive form fields permanently. Convert text boxes into uneditable graphics.</p>
             </a>
 
             <a href="pdf-to-img.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-orange-400 dark:hover:border-orange-500 relative overflow-hidden">
@@ -175,9 +195,6 @@
                 </div>
                 <h3 class="text-2xl font-bold mb-3">PDF to Image</h3>
                 <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Extract and convert document pages into high-quality JPG, PNG, or WEBP files instantly.</p>
-                <div class="absolute bottom-8 right-8 text-orange-600 dark:text-orange-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
             </a>
 
             <a href="img-to-pdf.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-pink-400 dark:hover:border-pink-500 relative overflow-hidden">
@@ -186,9 +203,6 @@
                 </div>
                 <h3 class="text-2xl font-bold mb-3">Image to PDF</h3>
                 <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Turn photos of homework, receipts, or sketches into a clean, unified PDF document.</p>
-                <div class="absolute bottom-8 right-8 text-pink-600 dark:text-pink-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
             </a>
 
             <a href="watermark.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-purple-400 dark:hover:border-purple-500 relative overflow-hidden">
@@ -197,9 +211,6 @@
                 </div>
                 <h3 class="text-2xl font-bold mb-3">Add Watermark</h3>
                 <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Stamp custom text, dates, or logos across every page of your document for security.</p>
-                <div class="absolute bottom-8 right-8 text-purple-600 dark:text-purple-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
             </a>
 
             <a href="extract-text.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-teal-400 dark:hover:border-teal-500 relative overflow-hidden">
@@ -208,20 +219,6 @@
                 </div>
                 <h3 class="text-2xl font-bold mb-3">Extract Text</h3>
                 <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Pull the raw, selectable text layer out of any document and download it as a clean .txt file.</p>
-                <div class="absolute bottom-8 right-8 text-teal-600 dark:text-teal-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
-            </a>
-
-            <a href="page-numbers.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-rose-400 dark:hover:border-rose-500 relative overflow-hidden">
-                <div class="w-14 h-14 bg-rose-100 dark:bg-rose-900/50 rounded-2xl flex items-center justify-center mb-6 text-rose-600 dark:text-rose-400 group-hover:scale-110 transition-transform">
-                    <i class="fa-solid fa-list-ol text-2xl"></i>
-                </div>
-                <h3 class="text-2xl font-bold mb-3">Page Numbers</h3>
-                <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Automatically stamp clean, sequential page numbers into the margins of your documents.</p>
-                <div class="absolute bottom-8 right-8 text-rose-600 dark:text-rose-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
             </a>
 
             <a href="metadata.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-sky-400 dark:hover:border-sky-500 relative overflow-hidden">
@@ -230,33 +227,30 @@
                 </div>
                 <h3 class="text-2xl font-bold mb-3">Edit Metadata</h3>
                 <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Clean up hidden file data. Change the author, title, and keywords baked into your document.</p>
-                <div class="absolute bottom-8 right-8 text-sky-600 dark:text-sky-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
             </a>
 
         </div>
     </main>
 
-        <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-12">
-            <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-slate-500 dark:text-slate-400">
-                
-                <div class="flex items-center gap-2 mb-4 md:mb-0">
-                    <i class="fa-solid fa-crown text-xl text-slate-300 dark:text-slate-700"></i>
-                    <span class="font-bold text-slate-700 dark:text-slate-300">PDFKing</span>
-                </div>
-                
-                <div class="text-center md:text-left mb-4 md:mb-0 text-sm font-medium">
-                    &copy; 2026 PDFKing. Built for Privacy.
-                </div>
-
-                <div class="flex gap-6 text-sm font-medium">
-                    <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Privacy Policy</a>
-                    <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Terms of Service</a>
-                </div>
-
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-slate-500 dark:text-slate-400">
+            
+            <div class="flex items-center gap-2 mb-4 md:mb-0">
+                <i class="fa-solid fa-crown text-xl text-slate-300 dark:text-slate-700"></i>
+                <span class="font-bold text-slate-700 dark:text-slate-300">PDFKing</span>
             </div>
-        </footer>
+            
+            <div class="text-center md:text-left mb-4 md:mb-0 text-sm font-medium">
+                &copy; 2026 PDFKing. Built for Privacy.
+            </div>
+
+            <div class="flex gap-6 text-sm font-medium">
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Privacy Policy</a>
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Terms of Service</a>
+            </div>
+
+        </div>
+    </footer>
 
     <script>
         const themeToggleBtn = document.getElementById('themeToggle');
