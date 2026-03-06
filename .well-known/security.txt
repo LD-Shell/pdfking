@@ -1,0 +1,9 @@
+# PDFKing Vulnerability Reporting Policy
+# We take the privacy and security of our 100% client-side tools seriously.
+# If you discover a vulnerability in our JavaScript processing or UI, please report it.
+
+Contact: mailto:security@pdfking.net
+Preferred-Languages: en
+Canonical: https://pdfking.net/.well-known/security.txt
+Policy: https://pdfking.net/privacy.html
+Expires: 2027-03-06T00:00:00.000Z
