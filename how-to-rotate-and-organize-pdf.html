@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>How to Rotate, Reorder & Organize PDF Pages | PDFKing</title>
+    <meta name="description" content="Learn how to rotate PDF pages, reorder them by drag and drop, delete unwanted pages, and extract selections — all in a visual page grid directly in your browser.">
+    <meta name="author" content="PDFKing">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="canonical" href="https://pdfking.net/how-to-rotate-and-organize-pdf.html">
+
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://pdfking.net/how-to-rotate-and-organize-pdf.html">
+    <meta property="og:title" content="How to Rotate, Reorder & Organize PDF Pages | PDFKing">
+    <meta property="og:description" content="Visual page grid, drag-to-reorder, shift-click selection, rotate, delete, and extract — all in your browser.">
+    <meta property="og:image" content="https://pdfking.net/assets/og-image.webp">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://pdfking.net/how-to-rotate-and-organize-pdf.html">
+    <meta property="twitter:title" content="How to Rotate & Organize PDF Pages | PDFKing">
+    <meta property="twitter:description" content="Visual drag-to-reorder, rotate, delete and extract pages in your browser.">
+    <meta property="twitter:image" content="https://pdfking.net/assets/og-image.webp">
+
+    <link rel="icon" type="image/x-icon" href="https://pdfking.net/assets/favicon.ico">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Rotate, Reorder and Organize PDF Pages",
+        "description": "Use PDFKing's visual page grid to rotate, reorder by drag-and-drop, delete, and extract PDF pages entirely in your browser.",
+        "step": [
+            { "@type": "HowToStep", "name": "Upload your PDF", "text": "Go to pdfking.net/rotate.html and upload your PDF. Every page is rendered as a thumbnail in a visual grid." },
+            { "@type": "HowToStep", "name": "Select pages", "text": "Click any page card to select it. Use Shift+click to select a range. Use the checkbox in the top-left corner of each card for precise control." },
+            { "@type": "HowToStep", "name": "Rotate, delete or extract", "text": "Use the toolbar buttons to rotate left/right, delete selected pages, or extract them as a separate PDF." },
+            { "@type": "HowToStep", "name": "Reorder by drag and drop", "text": "Drag any page card left or right to reorder pages. A blue indicator line shows exactly where the page will land." },
+            { "@type": "HowToStep", "name": "Save your organized PDF", "text": "Enter a filename and click Save PDF. Your reorganized document downloads immediately." }
+        ],
+        "tool": { "@type": "HowToTool", "name": "PDFKing Rotate & Organize", "url": "https://pdfking.net/rotate.html" }
+    }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/all.min.css">
+    <style>
+        .prose h2 { font-size: 1.5rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 1rem; }
+        .prose h3 { font-size: 1.15rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.6rem; }
+        .prose p { margin-bottom: 1rem; line-height: 1.75; color: #475569; }
+        .dark .prose p { color: #94a3b8; }
+        .prose ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+        .prose ul li { margin-bottom: 0.4rem; line-height: 1.7; color: #475569; }
+        .dark .prose ul li { color: #94a3b8; }
+        .prose strong { color: #1e293b; }
+        .dark .prose strong { color: #e2e8f0; }
+        .step-num { width: 32px; height: 32px; background: #2563eb; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+        .action-pill { display: inline-flex; align-items: center; gap: 5px; border: 1px solid #e2e8f0; border-radius: 8px; padding: 4px 10px; font-size: 12px; font-weight: 600; background: white; }
+        .dark .action-pill { background: #1e293b; border-color: #334155; color: #cbd5e1; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <header class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 sticky top-0 z-50 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <div class="bg-indigo-600 text-white p-1.5 rounded-lg"><i class="fa-solid fa-crown text-sm"></i></div>
+                <span class="text-xl font-black tracking-tighter">PDFKing</span>
+            </a>
+            <button id="themeToggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="flex-grow max-w-3xl mx-auto px-6 py-12 w-full">
+
+        <nav class="text-xs text-slate-400 mb-8 flex items-center gap-2">
+            <a href="index.html" class="hover:text-indigo-500 transition-colors">Home</a>
+            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            <a href="index.html#guides" class="hover:text-indigo-500 transition-colors">Guides</a>
+            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            <span class="text-slate-600 dark:text-slate-300">Rotate & Organize PDF</span>
+        </nav>
+
+        <div class="mb-8">
+            <span class="inline-flex items-center gap-1.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full text-xs font-bold mb-4">
+                <i class="fa-solid fa-rotate text-[10px]"></i> Organisation
+            </span>
+            <h1 class="text-4xl font-extrabold mb-4 leading-tight">How to Rotate, Reorder & Organize PDF Pages</h1>
+            <p class="text-lg text-slate-500 dark:text-slate-400 leading-relaxed">A fully visual page editor — see thumbnail previews of every page, drag to reorder, shift-click to select ranges, rotate, delete, or extract pages. All in your browser.</p>
+        </div>
+
+        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/40 rounded-2xl p-6 mb-10 flex flex-col sm:flex-row items-center gap-4">
+            <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-xl flex items-center justify-center text-blue-600 flex-shrink-0 text-xl">
+                <i class="fa-solid fa-rotate"></i>
+            </div>
+            <div class="flex-grow text-center sm:text-left">
+                <p class="font-bold text-sm">Ready to organize your PDF?</p>
+                <p class="text-xs text-slate-500 mt-0.5">Free, instant, and 100% private — no upload required.</p>
+            </div>
+            <a href="rotate.html" class="flex-shrink-0 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold text-sm transition-colors whitespace-nowrap">
+                Rotate & Organize <i class="fa-solid fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+
+        <article class="prose max-w-none">
+
+            <h2>What can you do in the page editor?</h2>
+            <p>The Rotate & Organize tool gives you a full visual editor for your PDF's pages. Every page is rendered as a thumbnail in a scrollable grid. From there you can do everything in one place — rotate, reorder, delete, and extract.</p>
+
+            <div class="not-prose grid grid-cols-2 gap-3 mb-8">
+                <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fa-solid fa-rotate-left text-blue-500 text-sm"></i>
+                        <p class="font-semibold text-sm">Rotate pages</p>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Rotate selected pages 90° left or right. The thumbnail updates immediately so you can confirm the orientation is correct.</p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fa-solid fa-up-down-left-right text-indigo-500 text-sm"></i>
+                        <p class="font-semibold text-sm">Drag to reorder</p>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Drag any page card left or right. A blue highlight line shows exactly where the page will land before you drop it.</p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fa-solid fa-trash text-red-500 text-sm"></i>
+                        <p class="font-semibold text-sm">Delete pages</p>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Select pages and click Delete. Deleted pages disappear from the grid — they won't appear in the saved PDF.</p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fa-solid fa-scissors text-emerald-500 text-sm"></i>
+                        <p class="font-semibold text-sm">Extract selected</p>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Select pages and click Extract to download them as a separate PDF — without affecting the main document.</p>
+                </div>
+            </div>
+
+            <h2>Step-by-step: Rotate and organize a PDF</h2>
+
+            <div class="flex flex-col gap-5 not-prose mb-8">
+                <div class="flex gap-4 items-start bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
+                    <div class="step-num">1</div>
+                    <div>
+                        <p class="font-semibold text-sm mb-1">Upload your PDF</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Go to <a href="rotate.html" class="text-indigo-500 hover:underline">pdfking.net/rotate.html</a> and upload your PDF. PDFKing renders every page as a thumbnail — a 20-page document gives you 20 previews.</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
+                    <div class="step-num">2</div>
+                    <div>
+                        <p class="font-semibold text-sm mb-1">Select the pages you want to work with</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                            You have three ways to select pages:
+                            <br><br>
+                            <strong class="text-slate-700 dark:text-slate-200">Click a card</strong> — toggles that page's selection on or off.<br>
+                            <strong class="text-slate-700 dark:text-slate-200">Shift + click</strong> — selects all pages between your last click and the current one. Great for selecting a long range quickly.<br>
+                            <strong class="text-slate-700 dark:text-slate-200">Select All button</strong> — selects or deselects every page in one click. If all pages are selected, it deselects all.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
+                    <div class="step-num">3</div>
+                    <div>
+                        <p class="font-semibold text-sm mb-1">Rotate selected pages</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">With pages selected, click <span class="action-pill not-prose"><i class="fa-solid fa-rotate-left text-slate-400 text-xs"></i></span> or <span class="action-pill not-prose"><i class="fa-solid fa-rotate-right text-slate-400 text-xs"></i></span> in the toolbar. The thumbnail rotates visually so you can confirm it looks right. You can rotate the same page multiple times — each click adds 90°.</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
+                    <div class="step-num">4</div>
+                    <div>
+                        <p class="font-semibold text-sm mb-1">Drag pages to reorder</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Grab any page card and drag it. A <strong class="text-slate-700 dark:text-slate-200">blue vertical indicator line</strong> appears on the left or right side of target cards as you hover, showing exactly where the dragged page will land. Drop to confirm the new position.</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
+                    <div class="step-num">5</div>
+                    <div>
+                        <p class="font-semibold text-sm mb-1">Delete or extract (optional)</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Select pages you want to remove and click the <strong class="text-red-500">trash icon</strong> — they're removed from the grid and won't appear in the saved PDF. Or click <strong class="text-slate-700 dark:text-slate-200">Extract</strong> to save selected pages as a separate PDF file while keeping the main document intact.</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
+                    <div class="step-num">6</div>
+                    <div>
+                        <p class="font-semibold text-sm mb-1">Save your PDF</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Enter a filename in the toolbar field and click <strong class="text-slate-700 dark:text-slate-200">Save PDF</strong>. Your reorganized document downloads immediately. The header also shows the page count and file size for reference.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2>Tips for working faster</h2>
+            <ul>
+                <li><strong>Shift-click is the fastest way to select a long run of pages</strong> — click the first, then shift-click the last, and everything in between is selected.</li>
+                <li><strong>You can deselect individual pages</strong> from a shift-selected range by clicking them again.</li>
+                <li><strong>Rotate before reordering</strong> — it's easier to spot which pages need rotating when they're still in original order.</li>
+                <li><strong>The page number badge</strong> (top-right of each card) always shows the current position in the grid, updating as you drag and reorder.</li>
+                <li><strong>Deleting a page doesn't affect the original file</strong> — you can always close the tab and start over if you make a mistake.</li>
+            </ul>
+
+            <h2>Frequently asked questions</h2>
+
+            <h3>Can I undo a deletion?</h3>
+            <p>Not currently within the tool — deleted pages are removed from the grid immediately. If you accidentally delete the wrong page, reload the tab and re-upload your original PDF to start over.</p>
+
+            <h3>Can I rotate and reorder at the same time?</h3>
+            <p>Yes. Both changes are applied together when you save. Rotate whichever pages need it, reorder everything, then click Save PDF — all edits are applied in one pass.</p>
+
+            <h3>What does Extract do vs Save PDF?</h3>
+            <p>Save PDF downloads the full current page grid (minus deleted pages) as one document. Extract downloads only the selected pages as a separate PDF — useful for pulling out a few pages to share without saving the entire modified document.</p>
+
+            <h3>Does rotating change the actual page content?</h3>
+            <p>No. PDFKing sets the PDF rotation flag — a metadata property that tells viewers how to display the page. The actual content data is unchanged. This is exactly how Adobe Acrobat handles rotation too.</p>
+
+        </article>
+
+        <div class="mt-16 border-t border-slate-200 dark:border-slate-800 pt-10">
+            <p class="text-sm font-bold text-slate-500 uppercase tracking-widest mb-5">Related tools</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <a href="rotate.html" class="flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl hover:border-indigo-400 hover:shadow-md transition-all font-medium text-sm">
+                    <i class="fa-solid fa-rotate text-blue-500"></i> Rotate & Organize
+                </a>
+                <a href="merge.html" class="flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl hover:border-indigo-400 hover:shadow-md transition-all font-medium text-sm">
+                    <i class="fa-solid fa-object-group text-indigo-500"></i> Merge PDFs
+                </a>
+                <a href="split.html" class="flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl hover:border-indigo-400 hover:shadow-md transition-all font-medium text-sm">
+                    <i class="fa-solid fa-scissors text-emerald-500"></i> Split PDF
+                </a>
+                <a href="delete.html" class="flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl hover:border-indigo-400 hover:shadow-md transition-all font-medium text-sm">
+                    <i class="fa-solid fa-trash-can text-red-500"></i> Delete Pages
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-slate-500 dark:text-slate-400">
+            <div class="flex items-center gap-2 mb-4 md:mb-0">
+                <i class="fa-solid fa-crown text-xl text-slate-300 dark:text-slate-700"></i>
+                <span class="font-bold text-slate-700 dark:text-slate-300">PDFKing</span>
+            </div>
+            <div class="text-center md:text-left mb-4 md:mb-0 text-sm font-medium">&copy; 2026 PDFKing. All rights reserved.</div>
+            <div class="flex gap-6 text-sm font-medium">
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Privacy Policy</a>
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        });
+    </script>
+</body>
+</html>
