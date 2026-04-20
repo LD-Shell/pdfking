@@ -6,8 +6,8 @@
     
     <title>PDFKing | Professional PDF Tools</title>
     <meta name="title" content="PDFKing | Professional PDF Tools">
-    <meta name="description" content="Fast, secure, and intuitive PDF tools. Merge, split, organize, and edit your documents instantly.">
-    <meta name="keywords" content="PDF tools, merge PDF, split PDF, delete pdf pages, secure PDF editor, professional PDF tools">
+    <meta name="description" content="Fast, secure, and intuitive PDF tools. Merge, split, organize, protect, unlock, and edit your documents instantly — 100% in your browser.">
+    <meta name="keywords" content="PDF tools, merge PDF, split PDF, delete pdf pages, protect PDF, unlock PDF, sign PDF, add page numbers PDF, secure PDF editor, professional PDF tools">
     <meta name="author" content="PDFKing">
     <meta name="theme-color" content="#4f46e5">
 
@@ -60,7 +60,7 @@
         "@type": "WebApplication",
         "name": "PDFKing",
         "url": "https://pdfking.net",
-        "description": "A complete suite of secure, professional PDF tools. Merge, split, flatten, and watermark documents instantly.",
+        "description": "A complete suite of secure, professional PDF tools. Merge, split, protect, unlock, sign, flatten, and watermark documents instantly.",
         "applicationCategory": "UtilityApplication",
         "operatingSystem": "All",
         "browserRequirements": "Requires JavaScript",
@@ -72,12 +72,13 @@
         "featureList": [
             "Instant document processing",
             "Secure file handling",
-            "Unlimited usage"
+            "Unlimited usage",
+            "100% client-side processing"
         ]
         }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
     
     <style>
         .tool-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -162,14 +163,15 @@
     </header>
 
     <main id="tools" class="max-w-7xl mx-auto px-6 pb-32 w-full scroll-mt-24">
-        
+
+        <!-- MOST POPULAR -->
         <h2 class="text-2xl font-bold mb-8 flex items-center gap-2 text-slate-800 dark:text-slate-200">
             <i class="fa-solid fa-layer-group text-indigo-500"></i> Most popular tools
         </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             
-            <a href="merge.html" class="tool-card group block p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 relative overflow-hidden">
+            <a href="merge.html" class="tool-card group block p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500">
                 <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/50 rounded-2xl flex items-center justify-center mb-4 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-object-group text-xl"></i>
                 </div>
@@ -177,7 +179,7 @@
                 <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Combine multiple files into one seamless document.</p>
             </a>
 
-            <a href="split.html" class="tool-card group block p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400 dark:hover:border-emerald-500 relative overflow-hidden">
+            <a href="split.html" class="tool-card group block p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400 dark:hover:border-emerald-500">
                 <div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/50 rounded-2xl flex items-center justify-center mb-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-scissors text-xl"></i>
                 </div>
@@ -185,7 +187,7 @@
                 <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Extract ranges or separate a document into multiple files.</p>
             </a>
 
-            <a href="delete.html" class="tool-card group block p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-red-400 dark:hover:border-red-500 relative overflow-hidden">
+            <a href="delete.html" class="tool-card group block p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-red-400 dark:hover:border-red-500">
                 <div class="w-12 h-12 bg-red-100 dark:bg-red-900/50 rounded-2xl flex items-center justify-center mb-4 text-red-600 dark:text-red-400 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-trash-can text-xl"></i>
                 </div>
@@ -193,7 +195,7 @@
                 <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Remove unwanted pages securely from your document.</p>
             </a>
 
-            <a href="rotate.html" class="tool-card group block p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 relative overflow-hidden">
+            <a href="rotate.html" class="tool-card group block p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500">
                 <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-2xl flex items-center justify-center mb-4 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-rotate text-xl"></i>
                 </div>
@@ -203,13 +205,14 @@
 
         </div>
 
-        <h2 class="text-2xl font-bold mb-8 flex items-center gap-2 text-slate-800 dark:text-slate-200 mt-16">
+        <!-- EDITING & CONVERSION -->
+        <h2 class="text-2xl font-bold mb-8 flex items-center gap-2 text-slate-800 dark:text-slate-200">
             <i class="fa-solid fa-wand-magic-sparkles text-purple-500"></i> Editing & conversion
         </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
 
-            <a href="flatten.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400 dark:hover:border-emerald-500 relative overflow-hidden">
+            <a href="flatten.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400 dark:hover:border-emerald-500">
                 <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/50 rounded-2xl flex items-center justify-center mb-6 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-file-shield text-2xl"></i>
                 </div>
@@ -217,7 +220,7 @@
                 <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Lock interactive form fields permanently. Convert text boxes into uneditable graphics.</p>
             </a>
 
-            <a href="pdf-to-img.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-orange-400 dark:hover:border-orange-500 relative overflow-hidden">
+            <a href="pdf-to-img.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-orange-400 dark:hover:border-orange-500">
                 <div class="w-14 h-14 bg-orange-100 dark:bg-orange-900/50 rounded-2xl flex items-center justify-center mb-6 text-orange-600 dark:text-orange-400 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-images text-2xl"></i>
                 </div>
@@ -225,7 +228,7 @@
                 <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Extract and convert document pages into high-quality JPG, PNG, or WEBP files instantly.</p>
             </a>
 
-            <a href="img-to-pdf.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-pink-400 dark:hover:border-pink-500 relative overflow-hidden">
+            <a href="img-to-pdf.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-pink-400 dark:hover:border-pink-500">
                 <div class="w-14 h-14 bg-pink-100 dark:bg-pink-900/50 rounded-2xl flex items-center justify-center mb-6 text-pink-600 dark:text-pink-400 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-file-image text-2xl"></i>
                 </div>
@@ -233,7 +236,7 @@
                 <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Turn scans, receipts, or sketches into a clean, unified PDF document.</p>
             </a>
 
-            <a href="watermark.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-purple-400 dark:hover:border-purple-500 relative overflow-hidden">
+            <a href="watermark.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-purple-400 dark:hover:border-purple-500">
                 <div class="w-14 h-14 bg-purple-100 dark:bg-purple-900/50 rounded-2xl flex items-center justify-center mb-6 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-stamp text-2xl"></i>
                 </div>
@@ -241,7 +244,15 @@
                 <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Stamp custom text, dates, or logos across every page of your document for security.</p>
             </a>
 
-            <a href="extract-text.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-teal-400 dark:hover:border-teal-500 relative overflow-hidden">
+            <a href="page-numbers.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-cyan-400 dark:hover:border-cyan-500">
+                <div class="w-14 h-14 bg-cyan-100 dark:bg-cyan-900/50 rounded-2xl flex items-center justify-center mb-6 text-cyan-600 dark:text-cyan-400 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-list-ol text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3">Add Page Numbers</h3>
+                <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Stamp page numbers onto every page. Choose position, font size, and starting number.</p>
+            </a>
+
+            <a href="extract-text.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-teal-400 dark:hover:border-teal-500">
                 <div class="w-14 h-14 bg-teal-100 dark:bg-teal-900/50 rounded-2xl flex items-center justify-center mb-6 text-teal-600 dark:text-teal-400 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-file-lines text-2xl"></i>
                 </div>
@@ -249,7 +260,7 @@
                 <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Pull the raw, selectable text layer out of any document and download it as a clean .txt file.</p>
             </a>
 
-            <a href="metadata.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-sky-400 dark:hover:border-sky-500 relative overflow-hidden">
+            <a href="metadata.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-sky-400 dark:hover:border-sky-500">
                 <div class="w-14 h-14 bg-sky-100 dark:bg-sky-900/50 rounded-2xl flex items-center justify-center mb-6 text-sky-600 dark:text-sky-400 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-tags text-2xl"></i>
                 </div>
@@ -258,25 +269,55 @@
             </a>
 
         </div>
+
+        <!-- SECURITY & SIGNATURES -->
+        <h2 class="text-2xl font-bold mb-8 flex items-center gap-2 text-slate-800 dark:text-slate-200">
+            <i class="fa-solid fa-shield-halved text-green-500"></i> Security & signatures
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <a href="protect.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500">
+                <div class="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/50 rounded-2xl flex items-center justify-center mb-6 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-lock text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3">Protect PDF</h3>
+                <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Encrypt your PDF with AES-256 password protection. Restrict printing, copying, and editing.</p>
+            </a>
+
+            <a href="unlock.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-500">
+                <div class="w-14 h-14 bg-amber-100 dark:bg-amber-900/50 rounded-2xl flex items-center justify-center mb-6 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-lock-open text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3">Unlock PDF</h3>
+                <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Remove password protection from a PDF you own. Download a fully unrestricted copy.</p>
+            </a>
+
+            <a href="sign.html" class="tool-card group block p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 hover:border-violet-400 dark:hover:border-violet-500">
+                <div class="w-14 h-14 bg-violet-100 dark:bg-violet-900/50 rounded-2xl flex items-center justify-center mb-6 text-violet-600 dark:text-violet-400 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-signature text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3">Sign PDF</h3>
+                <p class="text-slate-500 dark:text-slate-400 leading-relaxed">Draw, type, or upload your signature and place it anywhere on your document.</p>
+            </a>
+
+        </div>
+
     </main>
 
     <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-12">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-slate-500 dark:text-slate-400">
-            
             <div class="flex items-center gap-2 mb-4 md:mb-0">
                 <i class="fa-solid fa-crown text-xl text-slate-300 dark:text-slate-700"></i>
                 <span class="font-bold text-slate-700 dark:text-slate-300">PDFKing</span>
             </div>
-            
             <div class="text-center md:text-left mb-4 md:mb-0 text-sm font-medium">
                 &copy; 2026 PDFKing. All rights reserved.
             </div>
-
             <div class="flex gap-6 text-sm font-medium">
                 <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Privacy Policy</a>
                 <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Terms of Service</a>
             </div>
-
         </div>
     </footer>
 
@@ -289,4 +330,3 @@
     </script>
 </body>
 </html>
-
