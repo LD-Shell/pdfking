@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>How to Split a PDF into Multiple Files – Free Online | PDFKing</title>
+    <meta name="description" content="Learn how to split a PDF using three modes: every page, fixed intervals, or custom page ranges. Visual page grid with Part badges shows exactly what each output file will contain.">
+    <meta name="author" content="PDFKing">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="canonical" href="https://pdfking.net/how-to-split-a-pdf.html">
+
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://pdfking.net/how-to-split-a-pdf.html">
+    <meta property="og:title" content="How to Split a PDF into Multiple Files | PDFKing">
+    <meta property="og:description" content="Three split modes, visual page previews with Part badges, ZIP download — entirely in your browser.">
+    <meta property="og:image" content="https://pdfking.net/assets/og-image.webp">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://pdfking.net/how-to-split-a-pdf.html">
+    <meta property="twitter:title" content="How to Split a PDF into Multiple Files | PDFKing">
+    <meta property="twitter:description" content="Three split modes, visual page previews — entirely in your browser.">
+    <meta property="twitter:image" content="https://pdfking.net/assets/og-image.webp">
+
+    <link rel="icon" type="image/x-icon" href="https://pdfking.net/assets/favicon.ico">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Split a PDF into Multiple Files",
+        "description": "Split a PDF using three modes — every page, fixed intervals, or custom ranges — with a live visual preview of each output file.",
+        "step": [
+            { "@type": "HowToStep", "name": "Upload your PDF", "text": "Go to pdfking.net/split.html and upload the PDF you want to split." },
+            { "@type": "HowToStep", "name": "Choose a split mode", "text": "Select Every Page (one PDF per page), Fixed Size (every N pages), or Custom Range (define specific page ranges like 1-3, 5, 7-9)." },
+            { "@type": "HowToStep", "name": "Preview the output in the page grid", "text": "The page grid updates live showing a green 'Part X' badge on each page so you can see exactly which pages will end up in which output file before you download anything." },
+            { "@type": "HowToStep", "name": "Click Split PDF", "text": "Click Split PDF. Single-file results download directly; multiple files are automatically packaged into a ZIP." }
+        ],
+        "tool": { "@type": "HowToTool", "name": "PDFKing Split PDF", "url": "https://pdfking.net/split.html" }
+    }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/all.min.css">
+    <style>
+        .prose h2 { font-size: 1.5rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 1rem; }
+        .prose h3 { font-size: 1.15rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.6rem; }
+        .prose p { margin-bottom: 1rem; line-height: 1.75; color: #475569; }
+        .dark .prose p { color: #94a3b8; }
+        .prose ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+        .prose ul li { margin-bottom: 0.4rem; line-height: 1.7; color: #475569; }
+        .dark .prose ul li { color: #94a3b8; }
+        .prose strong { color: #1e293b; }
+        .dark .prose strong { color: #e2e8f0; }
+        .step-num { width: 32px; height: 32px; background: #059669; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+        .mode-badge { display: inline-flex; align-items: center; gap: 6px; background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+        .dark .mode-badge { background: rgba(5,150,105,0.1); border-color: rgba(5,150,105,0.3); color: #34d399; }
+        .part-badge { display: inline-flex; align-items: center; gap: 4px; background: #10b981; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 800; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <header class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 sticky top-0 z-50 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <div class="bg-indigo-600 text-white p-1.5 rounded-lg"><i class="fa-solid fa-crown text-sm"></i></div>
+                <span class="text-xl font-black tracking-tighter">PDFKing</span>
+            </a>
+            <button id="themeToggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="flex-grow max-w-3xl mx-auto px-6 py-12 w-full">
+
+        <nav class="text-xs text-slate-400 mb-8 flex items-center gap-2">
+            <a href="index.html" class="hover:text-indigo-500 transition-colors">Home</a>
+            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            <a href="index.html#guides" class="hover:text-indigo-500 transition-colors">Guides</a>
+            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            <span class="text-slate-600 dark:text-slate-300">Split a PDF</span>
+        </nav>
+
+        <div class="mb-8">
+            <span class="inline-flex items-center gap-1.5 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 px-3 py-1 rounded-full text-xs font-bold mb-4">
+                <i class="fa-solid fa-scissors text-[10px]"></i> Organisation
+            </span>
+            <h1 class="text-4xl font-extrabold mb-4 leading-tight">How to Split a PDF into Multiple Files</h1>
+            <p class="text-lg text-slate-500 dark:text-slate-400 leading-relaxed">Three split modes, a live visual page grid with green "Part X" badges showing exactly which pages go where, and automatic ZIP packaging — all in your browser.</p>
+        </div>
+
+        <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800/40 rounded-2xl p-6 mb-10 flex flex-col sm:flex-row items-center gap-4">
+            <div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/50 rounded-xl flex items-center justify-center text-emerald-600 flex-shrink-0 text-xl">
+                <i class="fa-solid fa-scissors"></i>
+            </div>
+            <div class="flex-grow text-center sm:text-left">
+                <p class="font-bold text-sm">Ready to split your PDF?</p>
+                <p class="text-xs text-slate-500 mt-0.5">Free, instant, and 100% private — no upload required.</p>
+            </div>
+            <a href="split.html" class="flex-shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-bold text-sm transition-colors whitespace-nowrap">
+                Split PDF <i class="fa-solid fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+
+        <article class="prose max-w-none">
+
+            <h2>The 3 split modes explained</h2>
+            <p>PDFKing's Split tool offers three different ways to define how your PDF gets divided. The page grid updates in real time as you type so you always see what the output will look like before you commit.</p>
+
+            <div class="not-prose flex flex-col gap-4 mb-8">
+
+                <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="mode-badge"><i class="fa-solid fa-copy"></i> Every Page</span>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Each page becomes its own separate PDF. A 12-page document produces 12 individual files. The page grid shows every page with a unique <span class="part-badge"><i class="fa-solid fa-file-pdf mr-1 text-[9px]"></i>Part N</span> badge. Best for separating scanned documents that were combined.</p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="mode-badge"><i class="fa-solid fa-layer-group"></i> Fixed Size</span>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Split every N pages. Enter a number — e.g. <strong class="text-slate-700 dark:text-slate-200">3</strong> — and PDFKing groups pages 1–3 as Part 1, 4–6 as Part 2, and so on. The last chunk may be smaller if pages don't divide evenly. The grid updates as you type the number.</p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="mode-badge"><i class="fa-solid fa-sliders"></i> Custom Range</span>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Define exact page ranges using comma-separated values — e.g. <strong class="text-slate-700 dark:text-slate-200">1-3, 5, 7-9</strong>. Each range becomes a separate output file. Pages not included in any range remain faded/greyed out in the grid. You can also <strong class="text-slate-700 dark:text-slate-200">click pages directly</strong> in the grid to select them — the text input updates automatically.</p>
+                </div>
+
+            </div>
+
+            <h2>Step-by-step: Split a PDF with PDFKing</h2>
+
+            <div class="flex flex-col gap-5 not-prose mb-8">
+                <div class="flex gap-4 items-start bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
+                    <div class="step-num">1</div>
+                    <div>
+                        <p class="font-semibold text-sm mb-1">Upload your PDF</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Go to <a href="split.html" class="text-indigo-500 hover:underline">pdfking.net/split.html</a> and upload your PDF. The tool renders a thumbnail of every page at a small scale so you can visually identify which pages you're working with.</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
+                    <div class="step-num">2</div>
+                    <div>
+                        <p class="font-semibold text-sm mb-1">Choose your split mode</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Select <strong class="text-slate-700 dark:text-slate-200">Every Page</strong>, <strong class="text-slate-700 dark:text-slate-200">Fixed Size</strong>, or <strong class="text-slate-700 dark:text-slate-200">Custom Range</strong> from the dropdown. The input field changes its placeholder to guide you.</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
+                    <div class="step-num">3</div>
+                    <div>
+                        <p class="font-semibold text-sm mb-1">Watch the live preview update</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">As you type your range or fixed number, the page grid updates in real time. Pages included in an output file get a green <span class="part-badge text-[10px]"><i class="fa-solid fa-file-pdf mr-0.5 text-[8px]"></i>Part 1</span> badge. Pages not selected are faded. A counter above the grid shows "Will output N file(s)".</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
+                    <div class="step-num">4</div>
+                    <div>
+                        <p class="font-semibold text-sm mb-1">Click Split PDF and download</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">If you're extracting a single range, the PDF downloads directly. If you have multiple output files, PDFKing automatically zips them into <strong class="text-slate-700 dark:text-slate-200">PDFKing_Split.zip</strong> — each file named <em>split_part_1.pdf</em>, <em>split_part_2.pdf</em>, etc.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2>Extracting pages vs splitting — what's the difference?</h2>
+            <p>In Custom Range mode with a single range entered (e.g. just <strong>3-7</strong>), PDFKing produces one output file and names it <em>extracted_pages.pdf</em> — recognising you're extracting rather than splitting. Enter multiple ranges separated by commas and it switches to numbered split files automatically.</p>
+
+            <h2>Frequently asked questions</h2>
+
+            <h3>Can I click pages in the grid instead of typing ranges?</h3>
+            <p>Yes — in Custom Range mode, clicking a page thumbnail toggles its selection. The text input updates automatically to reflect your selection as a formatted range (e.g. <strong>1-3, 5</strong>). You can mix clicking and typing freely.</p>
+
+            <h3>What if a page isn't included in any range?</h3>
+            <p>Unselected pages appear faded in the grid and are simply not included in any output file. They aren't deleted from the original — you're just choosing what to extract.</p>
+
+            <h3>Does splitting reduce PDF quality?</h3>
+            <p>No. Pages are copied at the binary level with no re-rendering. Quality is identical to the original.</p>
+
+            <h3>Can I split every page into its own file?</h3>
+            <p>Yes — select <strong>Every Page</strong> mode. No input needed. The grid immediately shows Part 1, Part 2, Part 3... on every page.</p>
+
+        </article>
+
+        <div class="mt-16 border-t border-slate-200 dark:border-slate-800 pt-10">
+            <p class="text-sm font-bold text-slate-500 uppercase tracking-widest mb-5">Related tools</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <a href="split.html" class="flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl hover:border-indigo-400 hover:shadow-md transition-all font-medium text-sm">
+                    <i class="fa-solid fa-scissors text-emerald-500"></i> Split PDF
+                </a>
+                <a href="merge.html" class="flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl hover:border-indigo-400 hover:shadow-md transition-all font-medium text-sm">
+                    <i class="fa-solid fa-object-group text-indigo-500"></i> Merge PDFs
+                </a>
+                <a href="delete.html" class="flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl hover:border-indigo-400 hover:shadow-md transition-all font-medium text-sm">
+                    <i class="fa-solid fa-trash-can text-red-500"></i> Delete Pages
+                </a>
+                <a href="rotate.html" class="flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl hover:border-indigo-400 hover:shadow-md transition-all font-medium text-sm">
+                    <i class="fa-solid fa-rotate text-blue-500"></i> Rotate & Organize
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-slate-500 dark:text-slate-400">
+            <div class="flex items-center gap-2 mb-4 md:mb-0">
+                <i class="fa-solid fa-crown text-xl text-slate-300 dark:text-slate-700"></i>
+                <span class="font-bold text-slate-700 dark:text-slate-300">PDFKing</span>
+            </div>
+            <div class="text-center md:text-left mb-4 md:mb-0 text-sm font-medium">&copy; 2026 PDFKing. All rights reserved.</div>
+            <div class="flex gap-6 text-sm font-medium">
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Privacy Policy</a>
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        });
+    </script>
+</body>
+</html>
