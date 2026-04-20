@@ -22,12 +22,11 @@
     <meta property="twitter:description" content="Automatically stamp sequential page numbers into your PDF documents securely in your browser.">
     <meta property="twitter:image" content="https://pdfking.net/assets/og-image.webp">
     <link rel="icon" type="image/x-icon" href="https://pdfking.net/assets/favicon.ico">
-<link rel="icon" type="image/png" sizes="48x48" href="https://pdfking.net/assets/favicon-48x48.png">
-<link rel="icon" type="image/png" sizes="192x192" href="https://pdfking.net/assets/favicon-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="https://pdfking.net/assets/favicon-512x512.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://pdfking.net/assets/favicon-48x48.png">
     <link rel="icon" type="image/png" sizes="32x32" href="https://pdfking.net/assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://pdfking.net/assets/favicon-16x16.png">
     <link rel="apple-touch-icon" href="https://pdfking.net/assets/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };
@@ -56,11 +55,11 @@
         }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
     
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+    <script src="js/pdf-lib.min.js"></script>
+    <script src="js/pdf.min.js"></script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/pdf.worker.min.js';</script>
 
     <style>
         .drag-over-zone { border-color: #e11d48 !important; background-color: rgba(225, 29, 72, 0.1) !important; }
