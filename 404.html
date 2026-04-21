@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Page Not Found | PDFKing</title>
+    <meta name="description" content="The page you're looking for doesn't exist. Head back to PDFKing and find the PDF tool you need.">
+    <meta name="robots" content="noindex, follow">
+    <meta name="author" content="PDFKing">
+    <meta name="theme-color" content="#4f46e5">
+
+    <link rel="icon" type="image/x-icon" href="https://pdfking.net/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://pdfking.net/assets/favicon-48x48.png">
+    <link rel="apple-touch-icon" href="https://pdfking.net/assets/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/all.min.css">
+
+    <style>
+        .tool-chip { transition: all 0.2s ease; }
+        .tool-chip:hover { transform: translateY(-2px); }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-12px) rotate(-2deg); }
+        }
+        .float-anim { animation: floatSlow 5s ease-in-out infinite; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- HEADER -->
+    <header class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 sticky top-0 z-50 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <div class="bg-indigo-600 text-white p-1.5 rounded-lg">
+                    <i class="fa-solid fa-crown text-sm"></i>
+                </div>
+                <span class="text-xl font-black tracking-tighter">PDFKing</span>
+            </a>
+            <button id="themeToggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="flex-grow flex flex-col items-center justify-center px-6 py-20 text-center">
+
+        <!-- Floating broken document illustration -->
+        <div class="float-anim mb-8 relative">
+            <div class="w-28 h-36 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl flex flex-col items-center justify-center gap-3 relative">
+                <i class="fa-solid fa-file-pdf text-5xl text-slate-300 dark:text-slate-600"></i>
+                <div class="absolute -top-3 -right-3 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center shadow-md">
+                    <i class="fa-solid fa-xmark text-white text-sm font-black"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 404 -->
+        <p class="text-8xl font-black text-indigo-600 dark:text-indigo-400 leading-none mb-4 tracking-tighter">404</p>
+        <h1 class="text-2xl md:text-3xl font-extrabold mb-3">Page not found</h1>
+        <p class="text-slate-500 dark:text-slate-400 max-w-md mb-10 leading-relaxed">
+            This page doesn't exist or may have moved. Head back to the homepage and find the PDF tool you need.
+        </p>
+
+        <!-- Primary CTA -->
+        <a href="index.html" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-2xl font-bold text-sm shadow-md transition-colors flex items-center gap-2 mb-12">
+            <i class="fa-solid fa-house"></i> Back to PDFKing
+        </a>
+
+        <!-- Quick tool links -->
+        <div class="w-full max-w-2xl">
+            <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">Or jump straight to a tool</p>
+            <div class="flex flex-wrap justify-center gap-3">
+
+                <a href="merge.html" class="tool-chip flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm">
+                    <i class="fa-solid fa-object-group text-indigo-500"></i> Merge PDFs
+                </a>
+                <a href="split.html" class="tool-chip flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-400 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm">
+                    <i class="fa-solid fa-scissors text-emerald-500"></i> Split PDF
+                </a>
+                <a href="protect.html" class="tool-chip flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm">
+                    <i class="fa-solid fa-lock text-indigo-500"></i> Protect PDF
+                </a>
+                <a href="unlock.html" class="tool-chip flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-400 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm">
+                    <i class="fa-solid fa-lock-open text-amber-500"></i> Unlock PDF
+                </a>
+                <a href="sign.html" class="tool-chip flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm">
+                    <i class="fa-solid fa-signature text-violet-500"></i> Sign PDF
+                </a>
+                <a href="rotate.html" class="tool-chip flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-400 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm">
+                    <i class="fa-solid fa-rotate text-blue-500"></i> Rotate & Organize
+                </a>
+                <a href="pdf-to-img.html" class="tool-chip flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-orange-400 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm">
+                    <i class="fa-solid fa-images text-orange-500"></i> PDF to Image
+                </a>
+                <a href="watermark.html" class="tool-chip flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-purple-400 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm">
+                    <i class="fa-solid fa-stamp text-purple-500"></i> Add Watermark
+                </a>
+
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-8">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-slate-500 dark:text-slate-400">
+            <div class="flex items-center gap-2 mb-4 md:mb-0">
+                <i class="fa-solid fa-crown text-xl text-slate-300 dark:text-slate-700"></i>
+                <span class="font-bold text-slate-700 dark:text-slate-300">PDFKing</span>
+            </div>
+            <div class="text-sm font-medium">&copy; 2026 PDFKing. All rights reserved.</div>
+            <div class="flex gap-6 text-sm font-medium mt-4 md:mt-0">
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Privacy Policy</a>
+                <a href="privacy.html" class="hover:text-indigo-500 transition-colors">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        });
+    </script>
+</body>
+</html>
