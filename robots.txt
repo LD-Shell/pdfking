@@ -1,9 +1,0 @@
-# https://pdfking.net/robots.txt
-
-User-agent: *
-Allow: /
-
-Disallow: /privacy.html
-Disallow: /terms.html
-
-Sitemap: https://pdfking.net/sitemap.xml
